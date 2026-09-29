@@ -5,6 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Tab</title>
 
+  <!-- Instant Cache Loader (Loads from LocalStorage in 0ms if cached, else streams from CDN) -->
+  <script>
+    (function() {
+      // 1. Load Font (Cached vs CDN)
+      const cachedFont = localStorage.getItem('cache_font_css');
+      if (cachedFont) {
+        const s = document.createElement('style');
+        s.id = 'cached-font-style';
+        s.textContent = cachedFont;
+        document.head.appendChild(s);
+      } else {
+        const l = document.createElement('link');
+        l.rel = 'stylesheet';
+        l.href = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap';
+        document.head.appendChild(l);
+      }
+
+      // 2. Load Phosphor Icons (Cached vs CDN)
+      const cachedPhosphor = localStorage.getItem('cache_phosphor_js');
+      if (cachedPhosphor) {
+        const sc = document.createElement('script');
+        sc.id = 'cached-phosphor-script';
+        sc.textContent = cachedPhosphor;
+        document.head.appendChild(sc);
+      } else {
+        const sc = document.createElement('script');
+        sc.src = 'https://unpkg.com/@phosphor-icons/web';
+        document.head.appendChild(sc);
+      }
+    })();
+  </script>
+
   <style>
     /* =========================================================
        SOLID M3 THEME TOKENS (Strictly Zero Gradients)
@@ -78,11 +110,8 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      /* Speed of Light: Native System Font (0ms Network Latency) */
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       outline: none !important;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
 
     body {
@@ -96,15 +125,6 @@
       overflow: hidden;
       user-select: none;
       transition: background-color 0.25s ease, color 0.25s ease;
-    }
-
-    .icon {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
-      display: inline-block;
-      vertical-align: middle;
-      flex-shrink: 0;
     }
 
     /* Top Action Button */
@@ -127,6 +147,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.4rem;
       cursor: pointer;
       transition: background-color 0.15s ease, color 0.15s ease;
     }
@@ -164,7 +185,7 @@
     .time {
       font-size: 4.8rem;
       font-weight: 300;
-      letter-spacing: -1.5px;
+      letter-spacing: -2px;
       font-variant-numeric: tabular-nums;
       color: var(--md-on-surface);
       line-height: 1;
@@ -172,7 +193,7 @@
 
     .date {
       font-size: 0.95rem;
-      font-weight: 400;
+      font-weight: 500;
       color: var(--md-on-surface-variant);
       margin-top: 10px;
       letter-spacing: 0.25px;
@@ -231,17 +252,15 @@
       color: var(--md-on-surface);
     }
 
-    .engine-trigger-btn .engine-svg-icon {
+    .engine-trigger-btn img {
       width: 22px;
       height: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 9999px;
+      object-fit: contain;
     }
 
     .caret-icon {
-      width: 14px;
-      height: 14px;
+      font-size: 0.85rem;
       transition: transform var(--apple-duration) var(--apple-ease);
     }
 
@@ -294,16 +313,17 @@
       color: var(--md-primary);
     }
 
-    .dropdown-item .engine-svg-icon {
+    .dropdown-item img {
       width: 20px;
       height: 20px;
       margin-right: 12px;
+      border-radius: 4px;
+      object-fit: contain;
     }
 
     .dropdown-item .check-icon {
       margin-left: auto;
-      width: 16px;
-      height: 16px;
+      font-size: 1.1rem;
       color: var(--md-primary);
       opacity: 0;
       transform: scale(0.7);
@@ -359,6 +379,7 @@
       color: var(--md-on-surface);
       cursor: pointer;
       margin-left: 6px;
+      font-size: 1.25rem;
       transition: background-color 0.15s ease, transform 0.15s ease;
     }
 
@@ -376,7 +397,7 @@
     }
 
     /* =========================================================
-       SUGGESTIONS DROPDOWN (Matches your Screenshot)
+       SUGGESTIONS DROPDOWN (Matches Screenshot)
        ========================================================= */
     .suggestions-container {
       position: absolute;
@@ -407,7 +428,6 @@
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* 1. Top Hit Item (Blue Pill / Direct Navigation) */
     .top-hit-item {
       background-color: var(--top-hit-bg);
       color: #ffffff;
@@ -459,7 +479,6 @@
       border-radius: 6px;
     }
 
-    /* 2. Regular Search Suggestions */
     .suggestion-item {
       display: flex;
       align-items: center;
@@ -477,6 +496,7 @@
     }
 
     .suggestion-icon {
+      font-size: 1.15rem;
       color: var(--md-on-surface-variant);
       display: flex;
       align-items: center;
@@ -492,16 +512,14 @@
       color: var(--md-on-surface);
     }
 
-    /* 3. Section Header (Firefox Suggest Style) */
     .dropdown-section-label {
       font-size: 0.75rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--md-on-surface-variant);
       padding: 10px 14px 4px;
       letter-spacing: 0.5px;
     }
 
-    /* 4. Quick Links Items */
     .quick-link-item {
       display: flex;
       align-items: center;
@@ -537,7 +555,7 @@
       text-overflow: ellipsis;
     }
 
-    /* Shortcuts Grid with Number Key Badges */
+    /* Shortcuts Grid */
     .shortcuts-container {
       position: absolute;
       top: calc(100% + 36px);
@@ -614,7 +632,7 @@
       text-align: center;
     }
 
-    /* Active Search State (Fluid Centering, NO BORDERS) */
+    /* Active Search State */
     body.is-focused .clock-section {
       opacity: 0;
       transform: translateY(-28px) scale(0.92);
@@ -639,7 +657,9 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
     }
 
-    /* Material 3 Settings Dialog */
+    /* =========================================================
+       SETTINGS DIALOG WITH CACHE SYSTEM
+       ========================================================= */
     .md-dialog-overlay {
       position: fixed;
       inset: 0;
@@ -660,7 +680,7 @@
 
     .md-dialog {
       width: 90%;
-      max-width: 460px;
+      max-width: 480px;
       background-color: var(--md-surface-container-high);
       border-radius: 28px;
       padding: 24px;
@@ -683,7 +703,7 @@
 
     .dialog-title {
       font-size: 1.25rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--md-on-surface);
       display: flex;
       align-items: center;
@@ -697,6 +717,38 @@
       text-transform: uppercase;
       letter-spacing: 0.8px;
       margin-bottom: 12px;
+    }
+
+    /* Cache Card */
+    .cache-card {
+      background-color: var(--md-surface-container);
+      border: 1px solid var(--md-outline-variant);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .cache-info {
+      margin-bottom: 12px;
+    }
+
+    .cache-status {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--md-on-surface);
+      margin-bottom: 4px;
+    }
+
+    .cache-subtext {
+      font-size: 0.8rem;
+      color: var(--md-on-surface-variant);
+      line-height: 1.4;
+    }
+
+    .cache-actions {
+      display: flex;
+      gap: 10px;
     }
 
     .theme-grid {
@@ -767,10 +819,10 @@
       background-color: var(--md-primary);
       color: var(--md-on-primary);
       font-size: 0.875rem;
-      font-weight: 500;
+      font-weight: 600;
       border: none;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
@@ -780,6 +832,26 @@
 
     .md-filled-button:hover {
       opacity: 0.92;
+    }
+
+    .md-outlined-button {
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 9999px;
+      background: transparent;
+      border: 1px solid var(--md-outline);
+      color: var(--md-on-surface);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease;
+    }
+
+    .md-outlined-button:hover {
+      background-color: rgba(255, 255, 255, 0.08);
     }
 
     .shortcut-list {
@@ -823,6 +895,7 @@
       align-items: center;
       padding: 4px;
       border-radius: 9999px;
+      font-size: 1.15rem;
     }
 
     .del-btn:hover {
@@ -835,7 +908,7 @@
   <!-- Top Action Button -->
   <header class="top-bar">
     <button class="md-icon-btn" id="open-settings" aria-label="Settings">
-      <svg class="icon" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84V125.84a16,16,0,0,0-12.87-15.71l-15.54-3.11a79.52,79.52,0,0,0-7.89-19l8.6-13.33a16,16,0,0,0-2.45-20.15l-14.14-14.14a16,16,0,0,0-20.15-2.45l-13.33,8.6a79.52,79.52,0,0,0-19-7.89l-3.11-15.54A16,16,0,0,0,106.16,8H93.84a16,16,0,0,0-15.71,12.87L75,36.41a79.52,79.52,0,0,0-19,7.89l-13.33-8.6a16,16,0,0,0-20.15,2.45L28.38,52.29a16,16,0,0,0-2.45,20.15l8.6,13.33a79.52,79.52,0,0,0-7.89,19L11.1,107.87A16,16,0,0,0,8,123.84v12.32a16,16,0,0,0,12.87,15.71l15.54,3.11a79.52,79.52,0,0,0,7.89,19l-8.6,13.33a16,16,0,0,0,2.45,20.15l14.14,14.14a16,16,0,0,0,20.15,2.45l13.33-8.6a79.52,79.52,0,0,0,19,7.89l3.11,15.54A16,16,0,0,0,93.84,248h12.32a16,16,0,0,0,15.71-12.87l3.11-15.54a79.52,79.52,0,0,0,19-7.89l13.33,8.6a16,16,0,0,0,20.15-2.45l14.14-14.14a16,16,0,0,0,2.45-20.15l-8.6-13.33a79.52,79.52,0,0,0,7.89-19l15.54-3.11A16,16,0,0,0,216,130.16Z"/></svg>
+      <i class="ph ph-gear"></i>
     </button>
   </header>
 
@@ -843,8 +916,8 @@
   <main class="center-stage">
     <!-- Live Clock & Date -->
     <section class="clock-section" id="clock-section">
-      <div class="time" id="clock"></div>
-      <div class="date" id="date"></div>
+      <div class="time" id="clock">00:00:00</div>
+      <div class="date" id="date">Loading...</div>
     </section>
 
     <!-- M3 Pill Search Bar (Dead-Center Anchor) -->
@@ -854,8 +927,8 @@
         <!-- Custom Engine Dropdown Trigger -->
         <div class="custom-dropdown" id="engine-dropdown">
           <button type="button" class="engine-trigger-btn" id="engine-trigger" aria-label="Choose Search Engine">
-            <span class="engine-svg-icon" id="active-engine-icon"></span>
-            <svg class="caret-icon" viewBox="0 0 256 256"><path fill="currentColor" d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>
+            <img id="active-engine-icon" src="" alt="Engine" />
+            <i class="ph ph-caret-down caret-icon"></i>
           </button>
 
           <div class="custom-dropdown-menu" id="engine-menu"></div>
@@ -871,7 +944,7 @@
         
         <div class="kbd-badge" id="kbd-badge">/</div>
         <button type="submit" class="submit-arrow-btn" id="submit-arrow" title="Visit / Search">
-          <svg class="icon" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg>
+          <i class="ph ph-arrow-right"></i>
         </button>
       </div>
 
@@ -887,13 +960,27 @@
   <div class="md-dialog-overlay" id="dialog-overlay">
     <div class="md-dialog">
       <div class="dialog-header">
-        <h2 class="dialog-title">
-          <svg class="icon" viewBox="0 0 256 256"><path d="M120,40a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16h72A8,8,0,0,1,120,40Zm96,72H168a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Zm-16,80H40a8,8,0,0,0,0,16H184a8,8,0,0,0,0-16ZM144,24a24,24,0,0,0-24,24v0a24,24,0,0,0,24,24h0a24,24,0,0,0,24-24v0A24,24,0,0,0,144,24Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,144,56ZM88,96a24,24,0,0,0-24,24v0a24,24,0,0,0,24,24h0a24,24,0,0,0,24-24v0A24,24,0,0,0,88,96Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,88,128Zm120,56a24,24,0,0,0-24,24v0a24,24,0,0,0,24,24h0a24,24,0,0,0,24-24v0A24,24,0,0,0,208,184Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,208,216Z"/></svg>
-          Preferences
-        </h2>
+        <h2 class="dialog-title"><i class="ph ph-sliders-horizontal"></i> Preferences</h2>
         <button class="md-icon-btn" id="close-settings" style="width:36px; height:36px;">
-          <svg class="icon" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+          <i class="ph ph-x"></i>
         </button>
+      </div>
+
+      <!-- Instant Offline Cache Section -->
+      <div class="settings-section-title">Speed & Offline Cache</div>
+      <div class="cache-card">
+        <div class="cache-info">
+          <span class="cache-status" id="cache-status-text">Checking cache...</span>
+          <p class="cache-subtext">Downloads and stores fonts, Phosphor icons, and site favicons directly into local storage so every new tab opens in 0ms offline.</p>
+        </div>
+        <div class="cache-actions">
+          <button type="button" class="md-filled-button" id="cache-assets-btn">
+            <i class="ph ph-lightning"></i> Cache All for 0ms Load
+          </button>
+          <button type="button" class="md-outlined-button" id="clear-cache-btn">
+            Clear
+          </button>
+        </div>
       </div>
 
       <!-- Solid M3 Palette Picker -->
@@ -923,8 +1010,7 @@
         <input type="text" id="shortcut-name" class="md-input" placeholder="Title (e.g. YouTube)" style="margin-bottom: 8px;" />
         <input type="text" id="shortcut-url" class="md-input" placeholder="URL (e.g. youtube.com)" style="margin-bottom: 12px;" />
         <button type="button" class="md-filled-button" id="add-btn">
-          <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
-          Add Shortcut
+          <i class="ph ph-plus"></i> Add Shortcut
         </button>
       </div>
 
@@ -937,23 +1023,13 @@
   </div>
 
   <script>
-    // Embedded Vector SVGs (0ms Network Latency, 100% Offline)
-    const ENGINE_SVGS = {
-      google: `<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.44 7.34 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.57H1.25C.45 8.16 0 9.98 0 12s.45 3.84 1.25 5.43l4.03-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.28 2.56 1.25 6.57l4.03 3.14c.95-2.83 3.6-4.96 6.72-4.96z"/></svg>`,
-      duckduckgo: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#DE5833"/><path d="M11 7h2v6h-2zm0 8h2v2h-2z" fill="#FFF"/></svg>`,
-      brave: `<svg viewBox="0 0 24 24"><path fill="#FB542B" d="M12 0l7.24 4.54-1.28 7.37L12 24l-5.96-12.09L4.76 4.54 12 0z"/></svg>`,
-      bing: `<svg viewBox="0 0 24 24"><path fill="#008373" d="m3.84 0 5.48 1.93v16.14l7.15-4.14-3.57-2.38-2.22 1.48V7.5l9.48 4.7v5.93l-10.89 5.87L3.84 20.4z"/></svg>`,
-      youtube: `<svg viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.376.55 9.376.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><polygon fill="#FFF" points="9.545 15.568 15.795 12 9.545 8.432"/></svg>`,
-      github: `<svg viewBox="0 0 24 24"><path fill="#FFF" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>`
-    };
-
     const ENGINES = [
-      { id: "google", name: "Google", url: "https://www.google.com/search?q=" },
-      { id: "duckduckgo", name: "DuckDuckGo", url: "https://duckduckgo.com/?q=" },
-      { id: "brave", name: "Brave", url: "https://search.brave.com/search?q=" },
-      { id: "bing", name: "Bing", url: "https://www.bing.com/search?q=" },
-      { id: "youtube", name: "YouTube", url: "https://www.youtube.com/results?search_query=" },
-      { id: "github", name: "GitHub", url: "https://github.com/search?q=" }
+      { id: "google", name: "Google", url: "https://www.google.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=google.com&sz=128" },
+      { id: "duckduckgo", name: "DuckDuckGo", url: "https://duckduckgo.com/?q=", icon: "https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=128" },
+      { id: "brave", name: "Brave", url: "https://search.brave.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=brave.com&sz=128" },
+      { id: "bing", name: "Bing", url: "https://www.bing.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=bing.com&sz=128" },
+      { id: "youtube", name: "YouTube", url: "https://www.youtube.com/results?search_query=", icon: "https://www.google.com/s2/favicons?domain=youtube.com&sz=128" },
+      { id: "github", name: "GitHub", url: "https://github.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" }
     ];
 
     const POPULAR_DEEP_LINKS = {
@@ -1024,7 +1100,8 @@
       return namePart.charAt(0).toUpperCase() + namePart.slice(1);
     }
 
-    function getFavicon(url) {
+    function getFavicon(url, item = null) {
+      if (item && item.cachedIcon) return item.cachedIcon;
       return `https://www.google.com/s2/favicons?domain=${getDomain(url)}&sz=128`;
     }
 
@@ -1032,23 +1109,20 @@
       return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
     }
 
-    // --- Synchronous Speed-of-Light Clock ---
-    const clockEl = document.getElementById('clock');
-    const dateEl = document.getElementById('date');
-    const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
-
+    // --- Live Clock ---
     function updateClock() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
       const m = String(now.getMinutes()).padStart(2, '0');
       const s = String(now.getSeconds()).padStart(2, '0');
-      clockEl.textContent = `${h}:${m}:${s}`;
-      dateEl.textContent = now.toLocaleDateString(undefined, dateOptions);
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+      const options = { weekday: 'long', month: 'short', day: 'numeric' };
+      document.getElementById('date').textContent = now.toLocaleDateString(undefined, options);
     }
     updateClock();
     setInterval(updateClock, 1000);
 
-    // --- Theme Application ---
+    // --- Theme Management ---
     function applyTheme(theme) {
       currentTheme = theme;
       document.documentElement.setAttribute("data-theme", theme);
@@ -1074,16 +1148,17 @@
     function renderEngineDropdown() {
       dropdownMenu.innerHTML = "";
       const current = getActiveEngine();
-      activeEngineIcon.innerHTML = ENGINE_SVGS[current.id];
+      activeEngineIcon.src = current.icon;
+      activeEngineIcon.alt = current.name;
       input.placeholder = `Search with ${current.name} or enter URL`;
 
       ENGINES.forEach(engine => {
         const item = document.createElement("div");
         item.className = `dropdown-item ${engine.id === currentEngineId ? 'active' : ''}`;
         item.innerHTML = `
-          <span class="engine-svg-icon">${ENGINE_SVGS[engine.id]}</span>
+          <img src="${engine.icon}" alt="${engine.name}">
           <span>${engine.name}</span>
-          <svg class="check-icon" viewBox="0 0 256 256"><path fill="currentColor" d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+          <i class="ph ph-check check-icon"></i>
         `;
         item.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -1117,7 +1192,7 @@
         card.innerHTML = `
           ${index < 6 ? `<span class="shortcut-badge">${index + 1}</span>` : ''}
           <div class="favicon-avatar">
-            <img src="${getFavicon(item.url)}" alt="${item.name}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23999%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/></svg>'">
+            <img src="${getFavicon(item.url, item)}" alt="${item.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23999%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/></svg>'">
           </div>
           <span class="shortcut-name">${item.name}</span>
         `;
@@ -1126,10 +1201,10 @@
         const row = document.createElement("div");
         row.className = "shortcut-list-item";
         row.innerHTML = `
-          <img src="${getFavicon(item.url)}" alt="" loading="lazy">
+          <img src="${getFavicon(item.url, item)}" alt="">
           <span>${item.name}</span>
           <button class="del-btn" onclick="removeShortcut(${index})" title="Delete">
-            <svg class="icon" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
+            <i class="ph ph-trash"></i>
           </button>
         `;
         list.appendChild(row);
@@ -1170,7 +1245,6 @@
         return;
       }
 
-      // 0ms Instant Local Top Hit Render
       if (isUrl(query)) {
         renderDropdownCombined(query, []);
       }
@@ -1182,7 +1256,7 @@
         script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=${encodeURIComponent(query)}&callback=handleSuggestions`;
         document.body.appendChild(script);
         currentScript = script;
-      }, 100);
+      }, 90);
     }
 
     window.handleSuggestions = function(data) {
@@ -1255,7 +1329,7 @@
         sugEl.className = "suggestion-item";
         sugEl.dataset.index = itemIndex;
         sugEl.innerHTML = `
-          <span class="suggestion-icon"><svg class="icon" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg></span>
+          <span class="suggestion-icon"><i class="ph ph-magnifying-glass"></i></span>
           <div>${htmlText}</div>
         `;
         sugEl.addEventListener("mousedown", (e) => {
@@ -1289,7 +1363,7 @@
           qlEl.className = "quick-link-item";
           qlEl.dataset.index = itemIndex;
           qlEl.innerHTML = `
-            <img src="${getFavicon(link.url)}" class="quick-link-favicon" alt="" loading="lazy">
+            <img src="${getFavicon(link.url)}" class="quick-link-favicon" alt="">
             <span class="quick-link-title">${escapeHtml(link.title)}</span>
             <span class="quick-link-domain">— ${escapeHtml(link.url.replace(/^https?:\/\//i, ''))}</span>
           `;
@@ -1357,7 +1431,7 @@
       if (input.value.trim()) fetchSuggestions(input.value.trim());
     });
 
-    // --- Instant Keyboard Actions ---
+    // --- Keyboard Navigation ---
     const dialog = document.getElementById("dialog-overlay");
 
     window.addEventListener("keydown", (e) => {
@@ -1440,13 +1514,102 @@
       }
     });
 
-    document.getElementById("open-settings").addEventListener("click", () => dialog.classList.add("active"));
+    // =========================================================
+    // INSTANT CACHE ENGINE (Fonts, Icons & Favicons)
+    // =========================================================
+    const cacheStatusText = document.getElementById("cache-status-text");
+    const cacheBtn = document.getElementById("cache-assets-btn");
+    const clearCacheBtn = document.getElementById("clear-cache-btn");
+
+    function updateCacheUI() {
+      const isFontCached = !!localStorage.getItem("cache_font_css");
+      const isPhosphorCached = !!localStorage.getItem("cache_phosphor_js");
+      if (isFontCached && isPhosphorCached) {
+        cacheStatusText.innerHTML = `<span style="color: #4ade80;">⚡ 100% Cached Locally</span> (Instant 0ms Load Enabled)`;
+        cacheBtn.textContent = "Refresh Cache";
+      } else {
+        cacheStatusText.innerHTML = `<span style="color: var(--md-on-surface-variant);">Not Cached</span> (Streaming from CDN)`;
+        cacheBtn.innerHTML = `<i class="ph ph-lightning"></i> Cache All for 0ms Load`;
+      }
+    }
+
+    async function cacheAllAssets() {
+      cacheBtn.disabled = true;
+      cacheBtn.textContent = "Downloading & Caching...";
+
+      try {
+        // 1. Fetch & Embed Google Font with Base64 WOFF2
+        const fontCssRes = await fetch("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+        let fontCssText = await fontCssRes.text();
+        const urlMatches = fontCssText.match(/url\((https:\/\/[^)]+)\)/g) || [];
+        for (const match of urlMatches) {
+          const fontUrl = match.slice(4, -1).replace(/['"]/g, '');
+          const woffRes = await fetch(fontUrl);
+          const blob = await woffRes.blob();
+          const base64Woff = await new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+          });
+          fontCssText = fontCssText.replace(fontUrl, base64Woff);
+        }
+        localStorage.setItem("cache_font_css", fontCssText);
+
+        // 2. Fetch & Embed Phosphor Icons Script
+        const phRes = await fetch("https://unpkg.com/@phosphor-icons/web");
+        const phJsText = await phRes.text();
+        localStorage.setItem("cache_phosphor_js", phJsText);
+
+        // 3. Convert Shortcut Favicons to Base64
+        for (let item of shortcuts) {
+          try {
+            const favUrl = `https://www.google.com/s2/favicons?domain=${getDomain(item.url)}&sz=128`;
+            const favRes = await fetch(favUrl);
+            const favBlob = await favRes.blob();
+            const base64Fav = await new Promise(resolve => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.readAsDataURL(favBlob);
+            });
+            item.cachedIcon = base64Fav;
+          } catch(e) {}
+        }
+        localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
+        renderShortcuts();
+
+        updateCacheUI();
+        cacheBtn.disabled = false;
+        alert("Success! Fonts, Phosphor icons, and favicons are cached locally. The page will now load in 0ms.");
+      } catch (err) {
+        console.error(err);
+        cacheBtn.disabled = false;
+        updateCacheUI();
+        alert("Failed to complete cache. Check internet connection.");
+      }
+    }
+
+    cacheBtn.addEventListener("click", cacheAllAssets);
+    clearCacheBtn.addEventListener("click", () => {
+      localStorage.removeItem("cache_font_css");
+      localStorage.removeItem("cache_phosphor_js");
+      shortcuts.forEach(s => delete s.cachedIcon);
+      localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
+      renderShortcuts();
+      updateCacheUI();
+      alert("Cache cleared. Assets will stream from CDN.");
+    });
+
+    document.getElementById("open-settings").addEventListener("click", () => {
+      updateCacheUI();
+      dialog.classList.add("active");
+    });
     document.getElementById("close-settings").addEventListener("click", () => dialog.classList.remove("active"));
     dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.classList.remove("active"); });
 
-    // Synchronous execution for instantaneous 0ms display
+    // Initial setup
     renderEngineDropdown();
     renderShortcuts();
+    updateCacheUI();
   </script>
 </body>
 </html>
