@@ -110,6 +110,16 @@
       padding: 0;
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       outline: none !important;
+      /* Completely Invisible Scrollbars across all elements */
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+
+    *::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent !important;
     }
 
     body {
@@ -155,7 +165,7 @@
       color: var(--md-on-surface);
     }
 
-    /* Dead-Center Stage with Smooth Float-Up Transition */
+    /* Dead-Center Stage with Smooth Float-Up */
     .center-stage {
       position: relative;
       width: 100%;
@@ -168,7 +178,7 @@
       transition: transform var(--apple-duration) var(--apple-ease);
     }
 
-    /* Float Stage Upwards on Focus to Prevent Bottom Clipping */
+    /* Only Shift Up when Focused */
     body.is-focused .center-stage {
       transform: translateY(min(-120px, -15vh));
     }
@@ -401,7 +411,7 @@
     }
 
     /* =========================================================
-       SUGGESTIONS DROPDOWN (Dynamically sized to fit screen)
+       SUGGESTIONS DROPDOWN
        ========================================================= */
     .suggestions-container {
       position: absolute;
@@ -417,11 +427,8 @@
       flex-direction: column;
       gap: 2px;
       z-index: 90;
-      /* Max height dynamically leaves breathing space at the bottom */
       max-height: calc(100vh - 230px);
       overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--md-outline-variant) transparent;
       transform-origin: top center;
       animation: suggestIn var(--apple-duration) var(--apple-ease);
     }
@@ -475,15 +482,23 @@
       text-overflow: ellipsis;
     }
 
+    /* VISIT Tag with Arrow Icon */
     .top-hit-tag {
       margin-left: auto;
-      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       background-color: rgba(255, 255, 255, 0.22);
-      padding: 2px 7px;
+      padding: 3px 8px;
       border-radius: 6px;
+    }
+
+    .top-hit-tag i {
+      font-size: 0.8rem;
     }
 
     .suggestion-item {
@@ -639,6 +654,25 @@
       text-align: center;
     }
 
+    /* Add Shortcut Tile Button */
+    .add-shortcut-card {
+      border: 1px dashed var(--md-outline);
+      background: transparent;
+      cursor: pointer;
+      color: var(--md-on-surface-variant);
+    }
+
+    .add-shortcut-card:hover {
+      background-color: var(--md-surface-container-high);
+      border-color: var(--md-primary);
+      color: var(--md-primary);
+    }
+
+    .add-avatar {
+      background-color: var(--md-surface-container);
+      font-size: 1.25rem;
+    }
+
     /* Active Search State Animation */
     body.is-focused .clock-section {
       opacity: 0;
@@ -664,7 +698,7 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
     }
 
-    /* Settings Dialog with Cache System */
+    /* Settings Dialog with Rich Icons */
     .md-dialog-overlay {
       position: fixed;
       inset: 0;
@@ -722,6 +756,9 @@
       text-transform: uppercase;
       letter-spacing: 0.8px;
       margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .cache-card {
@@ -794,25 +831,44 @@
       font-size: 0.85rem;
       font-weight: 500;
       color: var(--md-on-surface);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .form-field {
       margin-bottom: 16px;
     }
 
-    .md-input {
+    /* Input with Leading Icon */
+    .input-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .input-icon-wrapper i {
+      position: absolute;
+      left: 14px;
+      font-size: 1.15rem;
+      color: var(--md-on-surface-variant);
+      pointer-events: none;
+    }
+
+    .input-icon-wrapper .md-input {
       width: 100%;
       height: 48px;
       background-color: var(--md-surface-container);
       border: 1px solid var(--md-outline);
       border-radius: 8px;
-      padding: 0 14px;
+      padding: 0 14px 0 42px;
       color: var(--md-on-surface);
       font-size: 0.95rem;
       transition: border-color 0.2s ease;
     }
 
-    .md-input:focus {
+    .input-icon-wrapper .md-input:focus {
       border-color: var(--md-primary);
     }
 
@@ -851,6 +907,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
       transition: background-color 0.15s ease;
     }
 
@@ -956,7 +1013,7 @@
       <div class="suggestions-container" id="suggestions-box"></div>
     </form>
 
-    <!-- Shortcuts Grid (with 1-6 Key Badges) -->
+    <!-- Shortcuts Grid (with 1-6 Key Badges + Add Button) -->
     <nav class="shortcuts-container" id="shortcuts-grid"></nav>
   </main>
 
@@ -971,7 +1028,7 @@
       </div>
 
       <!-- Instant Offline Cache Section -->
-      <div class="settings-section-title">Speed & Offline Cache</div>
+      <div class="settings-section-title"><i class="ph ph-lightning"></i> Speed & Offline Cache</div>
       <div class="cache-card">
         <div class="cache-info">
           <span class="cache-status" id="cache-status-text">Checking cache...</span>
@@ -982,44 +1039,50 @@
             <i class="ph ph-lightning"></i> Cache All for 0ms Load
           </button>
           <button type="button" class="md-outlined-button" id="clear-cache-btn">
-            Clear
+            <i class="ph ph-trash"></i> Clear Cache
           </button>
         </div>
       </div>
 
       <!-- Solid M3 Palette Picker -->
-      <div class="settings-section-title">Solid Theme Palette</div>
+      <div class="settings-section-title"><i class="ph ph-palette"></i> Solid Theme Palette</div>
       <div class="theme-grid">
         <div class="theme-chip" data-theme-val="obsidian">
           <div class="theme-swatch" style="background:#191919;"></div>
-          <span class="theme-name">Obsidian</span>
+          <span class="theme-name"><i class="ph ph-moon"></i> Obsidian</span>
         </div>
         <div class="theme-chip" data-theme-val="navy">
           <div class="theme-swatch" style="background:#10141d;"></div>
-          <span class="theme-name">Deep Navy</span>
+          <span class="theme-name"><i class="ph ph-drop"></i> Deep Navy</span>
         </div>
         <div class="theme-chip" data-theme-val="espresso">
           <div class="theme-swatch" style="background:#1b1716;"></div>
-          <span class="theme-name">Espresso</span>
+          <span class="theme-name"><i class="ph ph-coffee"></i> Espresso</span>
         </div>
         <div class="theme-chip" data-theme-val="pine">
           <div class="theme-swatch" style="background:#121815;"></div>
-          <span class="theme-name">Forest Pine</span>
+          <span class="theme-name"><i class="ph ph-tree"></i> Forest Pine</span>
         </div>
       </div>
 
       <!-- Add Shortcut -->
-      <div class="settings-section-title">Add Shortcut (Keys 1–6)</div>
+      <div class="settings-section-title"><i class="ph ph-plus-circle"></i> Add Shortcut (Keys 1–6)</div>
       <div class="form-field">
-        <input type="text" id="shortcut-name" class="md-input" placeholder="Title (e.g. YouTube)" style="margin-bottom: 8px;" />
-        <input type="text" id="shortcut-url" class="md-input" placeholder="URL (e.g. youtube.com)" style="margin-bottom: 12px;" />
+        <div class="input-icon-wrapper">
+          <i class="ph ph-tag"></i>
+          <input type="text" id="shortcut-name" class="md-input" placeholder="Title (e.g. YouTube)" />
+        </div>
+        <div class="input-icon-wrapper">
+          <i class="ph ph-link"></i>
+          <input type="text" id="shortcut-url" class="md-input" placeholder="URL (e.g. youtube.com)" />
+        </div>
         <button type="button" class="md-filled-button" id="add-btn">
           <i class="ph ph-plus"></i> Add Shortcut
         </button>
       </div>
 
       <!-- Manage List -->
-      <div class="settings-section-title" style="margin-top: 20px;">Manage Shortcuts</div>
+      <div class="settings-section-title" style="margin-top: 20px;"><i class="ph ph-bookmarks"></i> Manage Shortcuts</div>
       <div class="form-field">
         <div class="shortcut-list" id="shortcut-list"></div>
       </div>
@@ -1034,6 +1097,32 @@
       { id: "bing", name: "Bing", url: "https://www.bing.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=bing.com&sz=128" },
       { id: "youtube", name: "YouTube", url: "https://www.youtube.com/results?search_query=", icon: "https://www.google.com/s2/favicons?domain=youtube.com&sz=128" },
       { id: "github", name: "GitHub", url: "https://github.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" }
+    ];
+
+    // Popular sites directory for instant partial matching (e.g. "ins" -> Instagram)
+    const POPULAR_SITES = [
+      { name: "Instagram", domain: "instagram.com", url: "https://www.instagram.com", aliases: ["ins", "insta", "instagram", "ig"] },
+      { name: "YouTube", domain: "youtube.com", url: "https://www.youtube.com", aliases: ["yt", "you", "youtube"] },
+      { name: "Reddit", domain: "reddit.com", url: "https://www.reddit.com", aliases: ["red", "reddit"] },
+      { name: "GitHub", domain: "github.com", url: "https://github.com", aliases: ["git", "github", "gh"] },
+      { name: "ChatGPT", domain: "chatgpt.com", url: "https://chatgpt.com", aliases: ["chat", "gpt", "chatgpt", "openai", "ai"] },
+      { name: "X", domain: "x.com", url: "https://x.com", aliases: ["x", "twit", "twitter"] },
+      { name: "Gmail", domain: "mail.google.com", url: "https://mail.google.com", aliases: ["gmail", "mail", "gma"] },
+      { name: "Google", domain: "google.com", url: "https://www.google.com", aliases: ["goog", "google"] },
+      { name: "Facebook", domain: "facebook.com", url: "https://www.facebook.com", aliases: ["fb", "face", "facebook"] },
+      { name: "TikTok", domain: "tiktok.com", url: "https://www.tiktok.com", aliases: ["tik", "tiktok", "tt"] },
+      { name: "Netflix", domain: "netflix.com", url: "https://www.netflix.com", aliases: ["net", "netflix"] },
+      { name: "Amazon", domain: "amazon.com", url: "https://www.amazon.com", aliases: ["amz", "amazon"] },
+      { name: "Spotify", domain: "spotify.com", url: "https://www.spotify.com", aliases: ["spot", "spotify"] },
+      { name: "Discord", domain: "discord.com", url: "https://discord.com", aliases: ["disc", "discord"] },
+      { name: "Twitch", domain: "twitch.tv", url: "https://www.twitch.tv", aliases: ["twitch"] },
+      { name: "LinkedIn", domain: "linkedin.com", url: "https://www.linkedin.com", aliases: ["link", "linkedin"] },
+      { name: "Pinterest", domain: "pinterest.com", url: "https://www.pinterest.com", aliases: ["pin", "pinterest"] },
+      { name: "Wikipedia", domain: "wikipedia.org", url: "https://www.wikipedia.org", aliases: ["wiki", "wikipedia"] },
+      { name: "WhatsApp", domain: "web.whatsapp.com", url: "https://web.whatsapp.com", aliases: ["wa", "whatsapp"] },
+      { name: "Telegram", domain: "web.telegram.org", url: "https://web.telegram.org", aliases: ["tg", "tele", "telegram"] },
+      { name: "Notion", domain: "notion.so", url: "https://www.notion.so", aliases: ["notion"] },
+      { name: "Figma", domain: "figma.com", url: "https://www.figma.com", aliases: ["figma"] }
     ];
 
     const POPULAR_DEEP_LINKS = {
@@ -1081,6 +1170,33 @@
       return domainPattern.test(str);
     }
 
+    // Match partial strings like "ins" to Instagram, or shortcuts
+    function findMatchedSite(q) {
+      q = q.trim().toLowerCase();
+      if (!q) return null;
+
+      // 1. Check user shortcuts first
+      for (let s of shortcuts) {
+        let sName = s.name.toLowerCase();
+        let sUrl = s.url.toLowerCase();
+        if (sName.startsWith(q) || q === sName || sUrl.includes(q)) {
+          let domain = getDomain(s.url);
+          return { name: s.name, domain: domain, url: formatUrl(s.url) };
+        }
+      }
+
+      // 2. Check popular sites knowledgebase
+      for (let site of POPULAR_SITES) {
+        if (site.aliases.some(alias => alias === q || alias.startsWith(q))) {
+          return site;
+        }
+        if (site.name.toLowerCase().startsWith(q) || site.domain.startsWith(q)) {
+          return site;
+        }
+      }
+      return null;
+    }
+
     function formatUrl(url) {
       url = url.trim();
       if (/^https?:\/\//i.test(url)) return url;
@@ -1100,6 +1216,8 @@
       const clean = domain.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0].toLowerCase();
       const shortcut = shortcuts.find(s => getDomain(s.url).replace(/^www\./, '').toLowerCase() === clean);
       if (shortcut) return shortcut.name;
+      const popular = POPULAR_SITES.find(p => p.domain === clean);
+      if (popular) return popular.name;
       const namePart = clean.split('.')[0];
       return namePart.charAt(0).toUpperCase() + namePart.slice(1);
     }
@@ -1141,7 +1259,7 @@
     });
     applyTheme(currentTheme);
 
-    // --- Engine Dropdown ---
+    // --- Engine Dropdown (NO UPWARD SHIFT WHEN CLICKED) ---
     const dropdown = document.getElementById("engine-dropdown");
     const dropdownMenu = document.getElementById("engine-menu");
     const engineTrigger = document.getElementById("engine-trigger");
@@ -1176,13 +1294,13 @@
       });
     }
 
+    // Engine selector simply opens menu without triggering is-focused upward shift!
     engineTrigger.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isOpen = dropdown.classList.toggle("open");
-      if (isOpen) document.body.classList.add("is-focused");
+      dropdown.classList.toggle("open");
     });
 
-    // --- Shortcuts Rendering ---
+    // --- Shortcuts Rendering (with + Tile Button) ---
     function renderShortcuts() {
       const grid = document.getElementById("shortcuts-grid");
       const list = document.getElementById("shortcut-list");
@@ -1213,6 +1331,24 @@
         `;
         list.appendChild(row);
       });
+
+      // Append '+' Button Tile to Grid
+      const addTile = document.createElement("button");
+      addTile.type = "button";
+      addTile.className = "md-shortcut-card add-shortcut-card";
+      addTile.id = "quick-add-shortcut-btn";
+      addTile.title = "Add Shortcut";
+      addTile.innerHTML = `
+        <div class="favicon-avatar add-avatar">
+          <i class="ph ph-plus"></i>
+        </div>
+        <span class="shortcut-name">Add</span>
+      `;
+      addTile.addEventListener("click", () => {
+        dialog.classList.add("active");
+        setTimeout(() => document.getElementById("shortcut-name").focus(), 100);
+      });
+      grid.appendChild(addTile);
     }
 
     window.removeShortcut = function(index) {
@@ -1236,7 +1372,7 @@
       }
     });
 
-    // --- Live Suggestions & Top Hit Rendering ---
+    // --- Live Suggestions & Instant Smart Top Hit ---
     const suggestionsBox = document.getElementById("suggestions-box");
     let currentScript = null;
     let selectedDropdownIndex = -1;
@@ -1249,8 +1385,10 @@
         return;
       }
 
-      if (isUrl(query)) {
-        renderDropdownCombined(query, []);
+      // Check if URL or matched partial prefix (e.g. "ins" -> Instagram)
+      const matchedSite = isUrl(query) ? null : findMatchedSite(query);
+      if (isUrl(query) || matchedSite) {
+        renderDropdownCombined(query, [], matchedSite);
       }
 
       clearTimeout(debounceTimer);
@@ -1270,25 +1408,36 @@
         return;
       }
       const searchSuggestions = (data && data[1]) ? data[1].slice(0, 5) : [];
-      renderDropdownCombined(rawQuery, searchSuggestions);
+      const matchedSite = isUrl(rawQuery) ? null : findMatchedSite(rawQuery);
+      renderDropdownCombined(rawQuery, searchSuggestions, matchedSite);
     };
 
-    function renderDropdownCombined(query, searchSuggestions) {
+    function renderDropdownCombined(query, searchSuggestions, matchedSite = null) {
       suggestionsBox.innerHTML = "";
       currentDropdownItems = [];
       const queryIsUrl = isUrl(query);
 
-      // 1. TOP HIT
-      if (queryIsUrl) {
-        const fullUrl = formatUrl(query);
-        const domain = getDomain(query);
-        const title = getSiteTitle(domain);
+      // 1. TOP HIT: Direct URL OR Auto-Detected Site (e.g. "ins" -> Instagram)
+      if (queryIsUrl || matchedSite) {
+        let fullUrl, domain, title, subtitle;
+
+        if (queryIsUrl) {
+          fullUrl = formatUrl(query);
+          domain = getDomain(query);
+          title = getSiteTitle(domain);
+          subtitle = query.replace(/^https?:\/\//i, '');
+        } else {
+          fullUrl = formatUrl(matchedSite.url);
+          domain = matchedSite.domain;
+          title = matchedSite.name;
+          subtitle = matchedSite.domain;
+        }
 
         const topHitItem = {
           type: 'url',
           url: fullUrl,
           title: title,
-          subtitle: query.replace(/^https?:\/\//i, ''),
+          subtitle: subtitle,
           icon: getFavicon(domain),
           isTopHit: true
         };
@@ -1300,7 +1449,7 @@
           <img src="${topHitItem.icon}" class="top-hit-favicon" alt="">
           <span class="top-hit-title">${escapeHtml(topHitItem.title)}</span>
           <span class="top-hit-domain">— ${escapeHtml(topHitItem.subtitle)}</span>
-          <span class="top-hit-tag">Visit</span>
+          <span class="top-hit-tag"><i class="ph ph-arrow-up-right"></i> Visit</span>
         `;
         topHitEl.addEventListener("mousedown", (e) => {
           e.preventDefault();
@@ -1312,7 +1461,7 @@
         selectedDropdownIndex = -1;
       }
 
-      // 2. SEARCH SUGGESTIONS
+      // 2. SEARCH SUGGESTIONS (With Bold Autocomplete Suffix)
       searchSuggestions.forEach((text) => {
         const itemObj = { type: 'search', text: text };
         const itemIndex = currentDropdownItems.length;
@@ -1344,10 +1493,14 @@
         suggestionsBox.appendChild(sugEl);
       });
 
-      // 3. QUICK LINKS
-      const domainKey = getDomain(query).replace(/^www\./, '').toLowerCase();
-      let quickLinks = POPULAR_DEEP_LINKS[domainKey] || [];
-      const matchingShortcuts = shortcuts.filter(s => s.name.toLowerCase().includes(query.toLowerCase()) || s.url.toLowerCase().includes(query.toLowerCase()));
+      // 3. QUICK LINKS (Deep links or matching shortcuts)
+      const domainKey = (matchedSite ? matchedSite.domain : getDomain(query)).replace(/^www\./, '').toLowerCase();
+      let quickLinks = POPULAR_DEEP_LINKS[domainKey] ? [...POPULAR_DEEP_LINKS[domainKey]] : [];
+
+      const matchingShortcuts = shortcuts.filter(s => 
+        s.name.toLowerCase().includes(query.toLowerCase()) || 
+        s.url.toLowerCase().includes(query.toLowerCase())
+      );
       
       matchingShortcuts.forEach(s => {
         if (!quickLinks.some(q => q.url === s.url)) quickLinks.push({ title: s.name, url: s.url });
@@ -1397,6 +1550,7 @@
       const query = input.value.trim();
       if (!query) return;
 
+      // 1. Selected Dropdown item execution
       if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
         const item = currentDropdownItems[selectedDropdownIndex];
         if (item.type === 'url') {
@@ -1409,11 +1563,20 @@
         }
       }
 
+      // 2. Direct URL navigation
       if (isUrl(query)) {
         window.location.href = formatUrl(query);
         return;
       }
 
+      // 3. Matched Site navigation (e.g. typing "ins" -> Instagram)
+      const matched = findMatchedSite(query);
+      if (matched) {
+        window.location.href = formatUrl(matched.url);
+        return;
+      }
+
+      // 4. Default Search Engine
       const engine = getActiveEngine();
       window.location.href = engine.url + encodeURIComponent(query);
     }
@@ -1430,18 +1593,19 @@
       fetchSuggestions(val);
     });
 
+    // Focusing the input triggers the smooth upward spotlight shift
     input.addEventListener("focus", () => {
       document.body.classList.add("is-focused");
       if (input.value.trim()) fetchSuggestions(input.value.trim());
     });
 
-    // --- Keyboard Navigation ---
+    // Keyboard Navigation
     const dialog = document.getElementById("dialog-overlay");
 
     window.addEventListener("keydown", (e) => {
       const isModalOpen = dialog.classList.contains("active");
 
-      // 1. '/' Toggle Focus
+      // 1. '/' Toggle Focus (Unfocuses only if input is empty)
       if (e.key === "/" && !isModalOpen) {
         if (document.activeElement === input) {
           if (input.value.trim() === "") {
@@ -1530,7 +1694,7 @@
       const isPhosphorCached = !!localStorage.getItem("cache_phosphor_js");
       if (isFontCached && isPhosphorCached) {
         cacheStatusText.innerHTML = `<span style="color: #4ade80;">⚡ 100% Cached Locally</span> (Instant 0ms Load Enabled)`;
-        cacheBtn.textContent = "Refresh Cache";
+        cacheBtn.innerHTML = `<i class="ph ph-arrows-clockwise"></i> Refresh Cache`;
       } else {
         cacheStatusText.innerHTML = `<span style="color: var(--md-on-surface-variant);">Not Cached</span> (Streaming from CDN)`;
         cacheBtn.innerHTML = `<i class="ph ph-lightning"></i> Cache All for 0ms Load`;
@@ -1539,7 +1703,7 @@
 
     async function cacheAllAssets() {
       cacheBtn.disabled = true;
-      cacheBtn.textContent = "Downloading & Caching...";
+      cacheBtn.innerHTML = `<i class="ph ph-circle-notch"></i> Downloading & Caching...`;
 
       try {
         const fontCssRes = await fetch("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
