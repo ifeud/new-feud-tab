@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Tab</title>
 
-  <!-- Instant Cache Loader (Loads from LocalStorage in 0ms if cached, else streams from CDN) -->
+  <!-- Instant Cache Loader (0ms from LocalStorage if cached, else CDN fallback) -->
   <script>
     (function() {
-      // 1. Load Font (Cached vs CDN)
       const cachedFont = localStorage.getItem('cache_font_css');
       if (cachedFont) {
         const s = document.createElement('style');
@@ -22,7 +21,6 @@
         document.head.appendChild(l);
       }
 
-      // 2. Load Phosphor Icons (Cached vs CDN)
       const cachedPhosphor = localStorage.getItem('cache_phosphor_js');
       if (cachedPhosphor) {
         const sc = document.createElement('script');
@@ -157,7 +155,7 @@
       color: var(--md-on-surface);
     }
 
-    /* Dead-Center Stage */
+    /* Dead-Center Stage with Smooth Float-Up Transition */
     .center-stage {
       position: relative;
       width: 100%;
@@ -167,6 +165,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      transition: transform var(--apple-duration) var(--apple-ease);
+    }
+
+    /* Float Stage Upwards on Focus to Prevent Bottom Clipping */
+    body.is-focused .center-stage {
+      transform: translateY(min(-120px, -15vh));
     }
 
     /* Clock & Date */
@@ -199,7 +203,7 @@
       letter-spacing: 0.25px;
     }
 
-    /* M3 Pill Search Bar (Dead-Center Anchor) */
+    /* M3 Pill Search Bar */
     .search-form {
       width: 100%;
       position: relative;
@@ -397,7 +401,7 @@
     }
 
     /* =========================================================
-       SUGGESTIONS DROPDOWN (Matches Screenshot)
+       SUGGESTIONS DROPDOWN (Dynamically sized to fit screen)
        ========================================================= */
     .suggestions-container {
       position: absolute;
@@ -413,8 +417,11 @@
       flex-direction: column;
       gap: 2px;
       z-index: 90;
-      max-height: 440px;
+      /* Max height dynamically leaves breathing space at the bottom */
+      max-height: calc(100vh - 230px);
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--md-outline-variant) transparent;
       transform-origin: top center;
       animation: suggestIn var(--apple-duration) var(--apple-ease);
     }
@@ -632,7 +639,7 @@
       text-align: center;
     }
 
-    /* Active Search State */
+    /* Active Search State Animation */
     body.is-focused .clock-section {
       opacity: 0;
       transform: translateY(-28px) scale(0.92);
@@ -657,9 +664,7 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
     }
 
-    /* =========================================================
-       SETTINGS DIALOG WITH CACHE SYSTEM
-       ========================================================= */
+    /* Settings Dialog with Cache System */
     .md-dialog-overlay {
       position: fixed;
       inset: 0;
@@ -719,7 +724,6 @@
       margin-bottom: 12px;
     }
 
-    /* Cache Card */
     .cache-card {
       background-color: var(--md-surface-container);
       border: 1px solid var(--md-outline-variant);
@@ -912,7 +916,7 @@
     </button>
   </header>
 
-  <!-- Dead-Center Stage -->
+  <!-- Dead-Center Stage with Spotlight Elevation -->
   <main class="center-stage">
     <!-- Live Clock & Date -->
     <section class="clock-section" id="clock-section">
@@ -920,7 +924,7 @@
       <div class="date" id="date">Loading...</div>
     </section>
 
-    <!-- M3 Pill Search Bar (Dead-Center Anchor) -->
+    <!-- M3 Pill Search Bar -->
     <form class="search-form" id="search-form" autocomplete="off">
       <div class="md-search-bar" id="search-bar">
 
@@ -1137,7 +1141,7 @@
     });
     applyTheme(currentTheme);
 
-    // --- Custom Dropdown Engine Selector ---
+    // --- Engine Dropdown ---
     const dropdown = document.getElementById("engine-dropdown");
     const dropdownMenu = document.getElementById("engine-menu");
     const engineTrigger = document.getElementById("engine-trigger");
@@ -1232,7 +1236,7 @@
       }
     });
 
-    // --- Live Suggestions & Instant Top Hit ---
+    // --- Live Suggestions & Top Hit Rendering ---
     const suggestionsBox = document.getElementById("suggestions-box");
     let currentScript = null;
     let selectedDropdownIndex = -1;
@@ -1308,7 +1312,7 @@
         selectedDropdownIndex = -1;
       }
 
-      // 2. SEARCH SUGGESTIONS (Bold Completion)
+      // 2. SEARCH SUGGESTIONS
       searchSuggestions.forEach((text) => {
         const itemObj = { type: 'search', text: text };
         const itemIndex = currentDropdownItems.length;
@@ -1538,7 +1542,6 @@
       cacheBtn.textContent = "Downloading & Caching...";
 
       try {
-        // 1. Fetch & Embed Google Font with Base64 WOFF2
         const fontCssRes = await fetch("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
         let fontCssText = await fontCssRes.text();
         const urlMatches = fontCssText.match(/url\((https:\/\/[^)]+)\)/g) || [];
@@ -1555,12 +1558,10 @@
         }
         localStorage.setItem("cache_font_css", fontCssText);
 
-        // 2. Fetch & Embed Phosphor Icons Script
         const phRes = await fetch("https://unpkg.com/@phosphor-icons/web");
         const phJsText = await phRes.text();
         localStorage.setItem("cache_phosphor_js", phJsText);
 
-        // 3. Convert Shortcut Favicons to Base64
         for (let item of shortcuts) {
           try {
             const favUrl = `https://www.google.com/s2/favicons?domain=${getDomain(item.url)}&sz=128`;
@@ -1606,7 +1607,6 @@
     document.getElementById("close-settings").addEventListener("click", () => dialog.classList.remove("active"));
     dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.classList.remove("active"); });
 
-    // Initial setup
     renderEngineDropdown();
     renderShortcuts();
     updateCacheUI();
