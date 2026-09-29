@@ -28,6 +28,8 @@
       --md-on-surface-variant: #c4c6d0;
       --md-outline: #44474e;
       --md-outline-variant: #35383f;
+      --top-hit-bg: #0063e1;
+      --top-hit-active: #0052bd;
     }
 
     [data-theme="navy"] {
@@ -41,6 +43,8 @@
       --md-on-surface-variant: #b0b9cc;
       --md-outline: #3d4758;
       --md-outline-variant: #283244;
+      --top-hit-bg: #1d4ed8;
+      --top-hit-active: #1e40af;
     }
 
     [data-theme="espresso"] {
@@ -54,6 +58,8 @@
       --md-on-surface-variant: #cbbab3;
       --md-outline: #52443e;
       --md-outline-variant: #3c322d;
+      --top-hit-bg: #8c4a2f;
+      --top-hit-active: #723b24;
     }
 
     [data-theme="pine"] {
@@ -67,10 +73,11 @@
       --md-on-surface-variant: #b4c5bb;
       --md-outline: #3d4e43;
       --md-outline-variant: #2a372f;
+      --top-hit-bg: #1e5e3a;
+      --top-hit-active: #174a2e;
     }
 
     :root {
-      /* Apple iOS Spring Deceleration Curve */
       --apple-ease: cubic-bezier(0.32, 0.72, 0, 1);
       --apple-duration: 380ms;
     }
@@ -130,7 +137,7 @@
     .center-stage {
       position: relative;
       width: 100%;
-      max-width: 660px;
+      max-width: 680px;
       padding: 0 20px;
       display: flex;
       flex-direction: column;
@@ -182,7 +189,7 @@
       border-radius: 9999px;
       display: flex;
       align-items: center;
-      padding: 0 16px 0 10px;
+      padding: 0 14px 0 10px;
       border: none;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
       transform-origin: center center;
@@ -318,6 +325,7 @@
       color: #72747d;
     }
 
+    /* Trailing Actions: Keyboard / Badge & Submit Arrow */
     .kbd-badge {
       display: inline-flex;
       align-items: center;
@@ -335,7 +343,38 @@
                   transform var(--apple-duration) var(--apple-ease);
     }
 
-    /* Autocomplete Suggestions Menu */
+    .submit-arrow-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background-color: transparent;
+      color: var(--md-on-surface);
+      cursor: pointer;
+      margin-left: 6px;
+      font-size: 1.25rem;
+      transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .submit-arrow-btn:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      transform: translateX(2px);
+    }
+
+    .search-has-text .submit-arrow-btn {
+      display: flex;
+    }
+
+    .search-has-text .kbd-badge {
+      display: none;
+    }
+
+    /* =========================================================
+       SUGGESTIONS DROPDOWN (Matches your Screenshot)
+       ========================================================= */
     .suggestions-container {
       position: absolute;
       top: calc(100% + 8px);
@@ -345,11 +384,13 @@
       border: 1px solid var(--md-outline-variant);
       border-radius: 20px;
       padding: 6px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.75);
       display: none;
       flex-direction: column;
       gap: 2px;
       z-index: 90;
+      max-height: 440px;
+      overflow-y: auto;
       transform-origin: top center;
       animation: suggestIn var(--apple-duration) var(--apple-ease);
     }
@@ -359,16 +400,69 @@
     }
 
     @keyframes suggestIn {
-      from { opacity: 0; transform: scale(0.96) translateY(-8px); }
+      from { opacity: 0; transform: scale(0.97) translateY(-6px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
+    /* 1. Top Hit Item (Blue Pill / Direct Navigation) */
+    .top-hit-item {
+      background-color: var(--top-hit-bg);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      margin-bottom: 4px;
+      transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .top-hit-item:hover, .top-hit-item.selected {
+      background-color: var(--top-hit-active);
+    }
+
+    .top-hit-favicon {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .top-hit-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    .top-hit-domain {
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-hit-tag {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background-color: rgba(255, 255, 255, 0.22);
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    /* 2. Regular Search Suggestions */
     .suggestion-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 16px;
-      border-radius: 14px;
+      padding: 9px 14px;
+      border-radius: 12px;
       color: var(--md-on-surface);
       font-size: 0.95rem;
       cursor: pointer;
@@ -379,15 +473,66 @@
       background-color: var(--md-surface-container-highest);
     }
 
-    .suggestion-item i.ph-magnifying-glass {
-      font-size: 1.1rem;
+    .suggestion-icon {
+      font-size: 1.15rem;
+      color: var(--md-on-surface-variant);
+      display: flex;
+      align-items: center;
+    }
+
+    .sug-prefix {
+      font-weight: 400;
       color: var(--md-on-surface-variant);
     }
 
-    .suggestion-item .arrow-icon {
-      margin-left: auto;
-      font-size: 0.9rem;
-      color: var(--md-outline);
+    .sug-suffix {
+      font-weight: 700;
+      color: var(--md-on-surface);
+    }
+
+    /* 3. Section Header (Firefox Suggest Style) */
+    .dropdown-section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--md-on-surface-variant);
+      padding: 10px 14px 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* 4. Quick Links Items */
+    .quick-link-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.12s ease;
+    }
+
+    .quick-link-item:hover, .quick-link-item.selected {
+      background-color: var(--md-surface-container-highest);
+    }
+
+    .quick-link-favicon {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      object-fit: contain;
+    }
+
+    .quick-link-title {
+      font-weight: 600;
+      color: var(--md-on-surface);
+      white-space: nowrap;
+    }
+
+    .quick-link-domain {
+      color: var(--md-on-surface-variant);
+      font-size: 0.88rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Shortcuts Grid with Number Key Badges */
@@ -492,14 +637,7 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
     }
 
-    body.is-focused .kbd-badge {
-      opacity: 0;
-      transform: scale(0.6);
-    }
-
-    /* =========================================================
-       REDESIGNED MATERIAL 3 SETTINGS DIALOG
-       ========================================================= */
+    /* Material 3 Settings Dialog */
     .md-dialog-overlay {
       position: fixed;
       inset: 0;
@@ -559,7 +697,6 @@
       margin-bottom: 12px;
     }
 
-    /* M3 Theme Palette Selector */
     .theme-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -601,7 +738,6 @@
       color: var(--md-on-surface);
     }
 
-    /* Form Fields */
     .form-field {
       margin-bottom: 16px;
     }
@@ -644,7 +780,6 @@
       opacity: 0.92;
     }
 
-    /* Shortcuts Management List */
     .shortcut-list {
       display: flex;
       flex-direction: column;
@@ -715,7 +850,7 @@
     <form class="search-form" id="search-form" autocomplete="off">
       <div class="md-search-bar" id="search-bar">
 
-        <!-- Custom Dropdown Menu with Search Engine Icons -->
+        <!-- Custom Engine Dropdown Trigger -->
         <div class="custom-dropdown" id="engine-dropdown">
           <button type="button" class="engine-trigger-btn" id="engine-trigger" aria-label="Choose Search Engine">
             <img id="active-engine-icon" src="" alt="Engine" />
@@ -732,10 +867,14 @@
           placeholder="Search or enter URL" 
           spellcheck="false" 
         />
+        
         <div class="kbd-badge" id="kbd-badge">/</div>
+        <button type="submit" class="submit-arrow-btn" id="submit-arrow" title="Visit / Search">
+          <i class="ph ph-arrow-right"></i>
+        </button>
       </div>
 
-      <!-- Live Autocomplete Suggestions -->
+      <!-- Suggestions & Direct Navigation Dropdown -->
       <div class="suggestions-container" id="suggestions-box"></div>
     </form>
 
@@ -775,7 +914,7 @@
       </div>
 
       <!-- Add Shortcut -->
-      <div class="settings-section-title">Add Shortcut (Max 6 for Keys 1–6)</div>
+      <div class="settings-section-title">Add Shortcut (Keys 1–6)</div>
       <div class="form-field">
         <input type="text" id="shortcut-name" class="md-input" placeholder="Title (e.g. YouTube)" style="margin-bottom: 8px;" />
         <input type="text" id="shortcut-url" class="md-input" placeholder="URL (e.g. youtube.com)" style="margin-bottom: 12px;" />
@@ -803,6 +942,26 @@
       { id: "github", name: "GitHub", url: "https://github.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" }
     ];
 
+    // Popular platform deep links (like in Firefox Suggest)
+    const POPULAR_DEEP_LINKS = {
+      'instagram.com': [
+        { title: 'Instagram • Messages', url: 'https://instagram.com/direct/inbox/' },
+        { title: 'Instagram • Explore', url: 'https://instagram.com/explore/' }
+      ],
+      'reddit.com': [
+        { title: 'Reddit • Popular', url: 'https://reddit.com/r/popular/' },
+        { title: 'Reddit • All', url: 'https://reddit.com/r/all/' }
+      ],
+      'github.com': [
+        { title: 'GitHub • Pull Requests', url: 'https://github.com/pulls' },
+        { title: 'GitHub • Trending', url: 'https://github.com/trending' }
+      ],
+      'youtube.com': [
+        { title: 'YouTube • Subscriptions', url: 'https://youtube.com/feed/subscriptions' },
+        { title: 'YouTube • Library', url: 'https://youtube.com/feed/library' }
+      ]
+    };
+
     const DEFAULT_SHORTCUTS = [
       { name: "YouTube", url: "https://www.youtube.com" },
       { name: "GitHub", url: "https://www.github.com" },
@@ -820,20 +979,49 @@
       return ENGINES.find(e => e.id === currentEngineId) || ENGINES[0];
     }
 
+    // --- Strict URL Detection ---
+    function isUrl(str) {
+      str = str.trim();
+      if (/^https?:\/\//i.test(str)) return true;
+      if (/^localhost(:\d+)?(\/.*)?$/i.test(str)) return true;
+      if (/^\d{1,3}(\.\d{1,3}){3}(:\d+)?(\/.*)?$/.test(str)) return true;
+      const domainPattern = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}(:\d+)?(\/.*)?$/;
+      return domainPattern.test(str);
+    }
+
     function formatUrl(url) {
-      return /^https?:\/\//i.test(url) ? url : 'https://' + url;
+      url = url.trim();
+      if (/^https?:\/\//i.test(url)) return url;
+      if (/^localhost/i.test(url) || /^\d{1,3}(\.\d{1,3}){3}/.test(url)) {
+        return 'http://' + url;
+      }
+      return 'https://' + url;
     }
 
     function getDomain(url) {
       try {
         return new URL(formatUrl(url)).hostname;
       } catch {
-        return url;
+        return url.replace(/^https?:\/\//i, '').split('/')[0].split('?')[0];
       }
+    }
+
+    function getSiteTitle(domain) {
+      const clean = domain.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0].toLowerCase();
+      const shortcut = shortcuts.find(s => getDomain(s.url).replace(/^www\./, '').toLowerCase() === clean);
+      if (shortcut) return shortcut.name;
+      const namePart = clean.split('.')[0];
+      return namePart.charAt(0).toUpperCase() + namePart.slice(1);
     }
 
     function getFavicon(url) {
       return `https://www.google.com/s2/favicons?domain=${getDomain(url)}&sz=128`;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
     }
 
     // --- Theme Management ---
@@ -850,7 +1038,6 @@
     document.querySelectorAll(".theme-chip").forEach(chip => {
       chip.addEventListener("click", () => applyTheme(chip.dataset.themeVal));
     });
-
     applyTheme(currentTheme);
 
     // --- Custom Dropdown Engine Selector ---
@@ -859,6 +1046,7 @@
     const engineTrigger = document.getElementById("engine-trigger");
     const activeEngineIcon = document.getElementById("active-engine-icon");
     const input = document.getElementById("search-input");
+    const searchBar = document.getElementById("search-bar");
 
     function renderEngineDropdown() {
       dropdownMenu.innerHTML = "";
@@ -963,19 +1151,24 @@
       }
     });
 
-    // --- Live Autocomplete via Google JSONP ---
+    // --- Live Suggestions & Top Hit Rendering (Matches Screenshot) ---
     const suggestionsBox = document.getElementById("suggestions-box");
     let currentScript = null;
-    let selectedSuggestionIndex = -1;
-    let suggestionsList = [];
+    let selectedDropdownIndex = -1;
+    let currentDropdownItems = []; // Stores list of { type: 'url'|'search', url, text }
 
     function fetchSuggestions(query) {
       if (!query || query.trim() === '') {
         closeSuggestions();
         return;
       }
-      if (currentScript) currentScript.remove();
 
+      // If it's a direct URL, immediately render top hit even before Google responds!
+      if (isUrl(query)) {
+        renderDropdownCombined(query, []);
+      }
+
+      if (currentScript) currentScript.remove();
       const script = document.createElement("script");
       script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=${encodeURIComponent(query)}&callback=handleSuggestions`;
       document.body.appendChild(script);
@@ -983,62 +1176,183 @@
     }
 
     window.handleSuggestions = function(data) {
-      if (data && data[1] && data[1].length > 0) {
-        suggestionsList = data[1].slice(0, 5);
-        renderSuggestions();
+      const rawQuery = input.value.trim();
+      if (!rawQuery) {
+        closeSuggestions();
+        return;
+      }
+      const searchSuggestions = (data && data[1]) ? data[1].slice(0, 5) : [];
+      renderDropdownCombined(rawQuery, searchSuggestions);
+    };
+
+    function renderDropdownCombined(query, searchSuggestions) {
+      suggestionsBox.innerHTML = "";
+      currentDropdownItems = [];
+      const queryIsUrl = isUrl(query);
+
+      // 1. TOP HIT (If typed a URL or known domain)
+      if (queryIsUrl) {
+        const fullUrl = formatUrl(query);
+        const domain = getDomain(query);
+        const title = getSiteTitle(domain);
+
+        const topHitItem = {
+          type: 'url',
+          url: fullUrl,
+          title: title,
+          subtitle: query.replace(/^https?:\/\//i, ''),
+          icon: getFavicon(domain),
+          isTopHit: true
+        };
+        currentDropdownItems.push(topHitItem);
+
+        const topHitEl = document.createElement("div");
+        topHitEl.className = "top-hit-item selected"; // Pre-selected by default!
+        topHitEl.innerHTML = `
+          <img src="${topHitItem.icon}" class="top-hit-favicon" alt="">
+          <span class="top-hit-title">${escapeHtml(topHitItem.title)}</span>
+          <span class="top-hit-domain">— ${escapeHtml(topHitItem.subtitle)}</span>
+          <span class="top-hit-tag">Visit</span>
+        `;
+        topHitEl.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          window.location.href = fullUrl;
+        });
+        suggestionsBox.appendChild(topHitEl);
+        selectedDropdownIndex = 0; // Default selected on Top Hit!
+      } else {
+        selectedDropdownIndex = -1;
+      }
+
+      // 2. SEARCH SUGGESTIONS (With Bold Autocomplete Completion)
+      searchSuggestions.forEach((text) => {
+        const itemObj = { type: 'search', text: text };
+        const itemIndex = currentDropdownItems.length;
+        currentDropdownItems.push(itemObj);
+
+        // Format: matched prefix is regular, completion is bold (like screenshot)
+        let htmlText = "";
+        const qLower = query.toLowerCase();
+        const tLower = text.toLowerCase();
+        if (tLower.startsWith(qLower)) {
+          const matched = text.slice(0, query.length);
+          const remainder = text.slice(query.length);
+          htmlText = `<span class="sug-prefix">${escapeHtml(matched)}</span><strong class="sug-suffix">${escapeHtml(remainder)}</strong>`;
+        } else {
+          htmlText = `<span>${escapeHtml(text)}</span>`;
+        }
+
+        const sugEl = document.createElement("div");
+        sugEl.className = "suggestion-item";
+        sugEl.dataset.index = itemIndex;
+        sugEl.innerHTML = `
+          <span class="suggestion-icon"><i class="ph ph-magnifying-glass"></i></span>
+          <div>${htmlText}</div>
+        `;
+        sugEl.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          const engine = getActiveEngine();
+          window.location.href = engine.url + encodeURIComponent(text);
+        });
+        suggestionsBox.appendChild(sugEl);
+      });
+
+      // 3. QUICK LINKS / FIREFOX SUGGEST STYLE (Deep links or matching shortcuts)
+      const domainKey = getDomain(query).replace(/^www\./, '').toLowerCase();
+      let quickLinks = POPULAR_DEEP_LINKS[domainKey] || [];
+
+      // Also check user's saved shortcuts matching query
+      const matchingShortcuts = shortcuts.filter(s => 
+        s.name.toLowerCase().includes(query.toLowerCase()) || 
+        s.url.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      matchingShortcuts.forEach(s => {
+        if (!quickLinks.some(q => q.url === s.url)) {
+          quickLinks.push({ title: s.name, url: s.url });
+        }
+      });
+
+      if (quickLinks.length > 0) {
+        const headerEl = document.createElement("div");
+        headerEl.className = "dropdown-section-label";
+        headerEl.textContent = "Quick Links";
+        suggestionsBox.appendChild(headerEl);
+
+        quickLinks.slice(0, 3).forEach(link => {
+          const itemIndex = currentDropdownItems.length;
+          currentDropdownItems.push({ type: 'url', url: link.url });
+
+          const qlEl = document.createElement("div");
+          qlEl.className = "quick-link-item";
+          qlEl.dataset.index = itemIndex;
+          qlEl.innerHTML = `
+            <img src="${getFavicon(link.url)}" class="quick-link-favicon" alt="">
+            <span class="quick-link-title">${escapeHtml(link.title)}</span>
+            <span class="quick-link-domain">— ${escapeHtml(link.url.replace(/^https?:\/\//i, ''))}</span>
+          `;
+          qlEl.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            window.location.href = formatUrl(link.url);
+          });
+          suggestionsBox.appendChild(qlEl);
+        });
+      }
+
+      if (currentDropdownItems.length > 0) {
+        suggestionsBox.classList.add("active");
       } else {
         closeSuggestions();
       }
-    };
-
-    function renderSuggestions() {
-      suggestionsBox.innerHTML = "";
-      selectedSuggestionIndex = -1;
-
-      suggestionsList.forEach((text, i) => {
-        const item = document.createElement("div");
-        item.className = "suggestion-item";
-        item.innerHTML = `
-          <i class="ph ph-magnifying-glass"></i>
-          <span>${text}</span>
-          <i class="ph ph-arrow-up-left arrow-icon"></i>
-        `;
-        item.addEventListener("mousedown", (e) => {
-          e.preventDefault();
-          executeSearch(text);
-        });
-        suggestionsBox.appendChild(item);
-      });
-
-      suggestionsBox.classList.add("active");
     }
 
     function closeSuggestions() {
       suggestionsBox.classList.remove("active");
       suggestionsBox.innerHTML = "";
-      selectedSuggestionIndex = -1;
-      suggestionsList = [];
+      selectedDropdownIndex = -1;
+      currentDropdownItems = [];
     }
 
-    // --- Search Submission ---
-    function executeSearch(query) {
+    // --- Search Submission & Direct URL Router ---
+    function executeSearchOrNav() {
+      const query = input.value.trim();
       if (!query) return;
-      if (/^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/.test(query)) {
-        window.location.href = formatUrl(query);
-      } else {
-        const engine = getActiveEngine();
-        window.location.href = engine.url + encodeURIComponent(query);
+
+      // 1. If an item is actively highlighted in the dropdown
+      if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
+        const item = currentDropdownItems[selectedDropdownIndex];
+        if (item.type === 'url') {
+          window.location.href = item.url;
+          return;
+        } else {
+          const engine = getActiveEngine();
+          window.location.href = engine.url + encodeURIComponent(item.text);
+          return;
+        }
       }
+
+      // 2. Strict Direct URL Navigation
+      if (isUrl(query)) {
+        window.location.href = formatUrl(query);
+        return;
+      }
+
+      // 3. Fallback to Search Engine
+      const engine = getActiveEngine();
+      window.location.href = engine.url + encodeURIComponent(query);
     }
 
     const form = document.getElementById("search-form");
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      executeSearch(input.value.trim());
+      executeSearchOrNav();
     });
 
+    // Input listeners
     input.addEventListener("input", (e) => {
-      fetchSuggestions(e.target.value);
+      const val = e.target.value;
+      searchBar.classList.toggle("search-has-text", val.trim().length > 0);
+      fetchSuggestions(val);
     });
 
     input.addEventListener("focus", () => {
@@ -1052,14 +1366,19 @@
     window.addEventListener("keydown", (e) => {
       const isModalOpen = dialog.classList.contains("active");
 
-      // 1. '/' TO FOCUS AND '/' AGAIN TO UNFOCUS
+      // 1. '/' TO FOCUS AND '/' AGAIN TO UNFOCUS (Allows typing '/' in URLs)
       if (e.key === "/" && !isModalOpen) {
-        e.preventDefault();
         if (document.activeElement === input) {
-          input.blur();
-          document.body.classList.remove("is-focused");
-          closeSuggestions();
+          // If search bar is empty, '/' acts as unfocus toggle!
+          if (input.value.trim() === "") {
+            e.preventDefault();
+            input.blur();
+            document.body.classList.remove("is-focused");
+            closeSuggestions();
+          }
+          // If input has text, let the user type '/' naturally (for URLs like instagram.com/)
         } else {
+          e.preventDefault();
           input.focus();
         }
         return;
@@ -1075,18 +1394,17 @@
         }
       }
 
-      // 3. ARROW KEYS FOR SUGGESTIONS
-      if (suggestionsBox.classList.contains("active") && suggestionsList.length > 0) {
-        const items = suggestionsBox.querySelectorAll(".suggestion-item");
+      // 3. ARROW KEYS FOR SUGGESTIONS & TOP HIT
+      if (suggestionsBox.classList.contains("active") && currentDropdownItems.length > 0) {
         if (e.key === "ArrowDown") {
           e.preventDefault();
-          selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
-          updateSuggestionHighlight(items);
+          selectedDropdownIndex = (selectedDropdownIndex + 1) % currentDropdownItems.length;
+          updateHighlight();
           return;
         } else if (e.key === "ArrowUp") {
           e.preventDefault();
-          selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
-          updateSuggestionHighlight(items);
+          selectedDropdownIndex = (selectedDropdownIndex - 1 + currentDropdownItems.length) % currentDropdownItems.length;
+          updateHighlight();
           return;
         }
       }
@@ -1106,12 +1424,17 @@
       }
     });
 
-    function updateSuggestionHighlight(items) {
-      items.forEach((item, idx) => {
-        item.classList.toggle("selected", idx === selectedSuggestionIndex);
+    function updateHighlight() {
+      const allItems = suggestionsBox.querySelectorAll(".top-hit-item, .suggestion-item, .quick-link-item");
+      allItems.forEach((el, idx) => {
+        el.classList.toggle("selected", idx === selectedDropdownIndex);
       });
-      if (selectedSuggestionIndex >= 0) {
-        input.value = suggestionsList[selectedSuggestionIndex];
+
+      if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
+        const item = currentDropdownItems[selectedDropdownIndex];
+        if (item.type === 'search') {
+          input.value = item.text;
+        }
       }
     }
 
