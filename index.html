@@ -56,6 +56,23 @@
       --arrow-btn-hover: #4a526b;
     }
 
+    [data-theme="oled"] {
+      --md-background: #000000;
+      --md-surface-container: #121212;
+      --md-surface-container-high: #1c1c1c;
+      --md-surface-container-highest: #282828;
+      --md-primary: #a8c7fa;
+      --md-on-primary: #062e6f;
+      --md-on-surface: #f3f3f3;
+      --md-on-surface-variant: #b0b0b0;
+      --md-outline: #3a3a3a;
+      --md-outline-variant: #262626;
+      --top-hit-bg: #0063e1;
+      --top-hit-active: #0052bd;
+      --arrow-btn-bg: #2a2e3d;
+      --arrow-btn-hover: #3b4154;
+    }
+
     [data-theme="navy"] {
       --md-background: #10141d;
       --md-surface-container: #171c26;
@@ -140,14 +157,34 @@
       overflow: hidden;
       user-select: none;
       transition: background-color 0.25s ease, color 0.25s ease;
+      position: relative;
     }
 
-    /* Top Action Button */
+    /* Custom Background Image Support */
+    body.has-custom-bg {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    body.has-custom-bg::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Top Action Button Bar */
     .top-bar {
       position: fixed;
       top: 24px;
       right: 24px;
       z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       transition: opacity var(--apple-duration) var(--apple-ease),
                   transform var(--apple-duration) var(--apple-ease);
     }
@@ -157,19 +194,21 @@
       height: 44px;
       border-radius: 9999px;
       border: none;
-      background-color: transparent;
+      background-color: var(--md-surface-container);
       color: var(--md-on-surface-variant);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       cursor: pointer;
-      transition: background-color 0.15s ease, color 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
     }
 
     .md-icon-btn:hover {
-      background-color: rgba(255, 255, 255, 0.08);
+      background-color: var(--md-surface-container-highest);
       color: var(--md-on-surface);
+      transform: translateY(-2px);
     }
 
     /* Center Stage */
@@ -182,6 +221,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      z-index: 2;
       transition: transform var(--apple-duration) var(--apple-ease);
     }
 
@@ -189,7 +229,7 @@
       transform: translateY(min(-120px, -15vh));
     }
 
-    /* Clock & Date */
+    /* Clock, Timer & Date */
     .clock-section {
       position: absolute;
       bottom: calc(100% + 32px);
@@ -209,6 +249,38 @@
       font-variant-numeric: tabular-nums;
       color: var(--md-on-surface);
       line-height: 1;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .timer-controls {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .timer-controls.active {
+      display: flex;
+    }
+
+    .timer-btn {
+      background: var(--md-surface-container);
+      border: 1px solid var(--md-outline-variant);
+      color: var(--md-on-surface);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .timer-btn:hover {
+      background: var(--md-surface-container-highest);
     }
 
     .date {
@@ -387,7 +459,7 @@
                   transform var(--apple-duration) var(--apple-ease);
     }
 
-    /* #393f51 Round Circle Submit Arrow Button with Smooth Pop/Hover Animations */
+    /* #393f51 Round Circle Submit Arrow Button */
     .submit-arrow-btn {
       display: none;
       align-items: center;
@@ -579,6 +651,15 @@
       font-size: 0.8rem;
     }
 
+    .visit-freq-badge {
+      font-size: 0.68rem;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      font-weight: 500;
+    }
+
     .suggestion-item {
       display: flex;
       align-items: center;
@@ -612,8 +693,9 @@
       color: var(--md-on-surface);
     }
 
+    /* Section Label & Clear All Button */
     .dropdown-section-label {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       font-weight: 600;
       color: var(--md-on-surface-variant);
       padding: 10px 14px 4px;
@@ -624,17 +706,24 @@
     }
 
     .clear-recent-history-btn {
-      background: transparent;
-      border: none;
-      color: var(--md-outline);
-      font-size: 0.72rem;
+      background: rgba(168, 199, 250, 0.12);
+      color: var(--md-primary);
+      border: 1px solid rgba(168, 199, 250, 0.25);
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
       cursor: pointer;
-      text-transform: none;
-      letter-spacing: normal;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
     }
 
     .clear-recent-history-btn:hover {
-      color: #ffb4ab;
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
     }
 
     .quick-link-item {
@@ -755,6 +844,7 @@
       justify-content: center;
       margin-bottom: 8px;
       transition: background-color 0.25s ease;
+      overflow: hidden;
     }
 
     .favicon-avatar img {
@@ -866,7 +956,7 @@
     }
 
     /* =========================================================
-       SETTINGS DIALOG (Wider on PC, Clean M3 Elements)
+       MODALS (Settings, Shortcut Editor, Cheat Sheet)
        ========================================================= */
     .md-dialog-overlay {
       position: fixed;
@@ -888,7 +978,7 @@
 
     .md-dialog {
       width: 92%;
-      max-width: 620px; /* Wider and comfortable on PC */
+      max-width: 620px;
       background-color: var(--md-surface-container-high);
       border-radius: 28px;
       padding: 28px;
@@ -969,7 +1059,6 @@
       line-height: 1.4;
     }
 
-    /* Redesigned Balanced M3 Cache Actions */
     .cache-actions {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -977,22 +1066,31 @@
       align-items: center;
     }
 
-    .md-tonal-button.danger {
-      background-color: rgba(239, 68, 68, 0.12);
-      color: #fca5a5;
-      border: 1px solid rgba(239, 68, 68, 0.25);
-      border-radius: 9999px;
-      padding: 0 18px;
+    .md-tonal-button {
       height: 42px;
-      font-weight: 600;
+      padding: 0 18px;
+      border-radius: 9999px;
+      background: var(--md-surface-container-highest);
+      border: 1px solid var(--md-outline-variant);
+      color: var(--md-on-surface);
       font-size: 0.86rem;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
       cursor: pointer;
       transition: all 0.15s ease;
-      white-space: nowrap;
+    }
+
+    .md-tonal-button:hover {
+      background: var(--md-outline);
+    }
+
+    .md-tonal-button.danger {
+      background-color: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.25);
     }
 
     .md-tonal-button.danger:hover {
@@ -1149,22 +1247,146 @@
     .del-btn:hover {
       background-color: rgba(255, 180, 171, 0.12);
     }
+
+    /* Scratchpad Drawer (Press N) */
+    .scratchpad-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 340px;
+      max-width: 90vw;
+      background-color: var(--md-surface-container-high);
+      border-left: 1px solid var(--md-outline-variant);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      z-index: 120;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform var(--apple-duration) var(--apple-ease);
+      padding: 20px;
+    }
+
+    .scratchpad-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .drawer-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scratchpad-textarea {
+      flex: 1;
+      width: 100%;
+      background: var(--md-surface-container);
+      border: 1px solid var(--md-outline-variant);
+      border-radius: 12px;
+      padding: 14px;
+      color: var(--md-on-surface);
+      font-size: 0.95rem;
+      resize: none;
+      line-height: 1.5;
+    }
+
+    /* Cheat Sheet Modal (Press ?) */
+    .cheat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .cheat-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--md-surface-container);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+    }
+
+    .cheat-key {
+      background: var(--md-surface-container-highest);
+      border: 1px solid var(--md-outline-variant);
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    /* Toast Notification System */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background-color: var(--md-surface-container-highest);
+      color: var(--md-on-surface);
+      border: 1px solid var(--md-outline-variant);
+      padding: 10px 18px;
+      border-radius: 9999px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+      animation: popBounce 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: opacity 0.2s ease;
+    }
+
+    .toast i {
+      font-size: 1.15rem;
+      color: var(--md-primary);
+    }
   </style>
 </head>
 <body>
 
-  <!-- Top Action Button -->
+  <!-- Top Action Button Bar -->
   <header class="top-bar">
-    <button class="md-icon-btn" id="open-settings" aria-label="Settings (Press S)">
+    <button class="md-icon-btn" id="open-scratchpad" title="Notes (Press N)">
+      <i class="ph ph-note"></i>
+    </button>
+    <button class="md-icon-btn" id="open-cheatsheet" title="Hotkeys (Press ?)">
+      <i class="ph ph-keyboard"></i>
+    </button>
+    <button class="md-icon-btn" id="open-settings" title="Settings (Press S)">
       <i class="ph ph-gear"></i>
     </button>
   </header>
 
   <!-- Dead-Center Stage with Spotlight Elevation -->
   <main class="center-stage">
-    <!-- Live Clock & Date -->
+    <!-- Live Clock, Pomodoro Timer & Date -->
     <section class="clock-section" id="clock-section">
-      <div class="time" id="clock">00:00:00</div>
+      <div class="time" id="clock" title="Click or Press P for Pomodoro">00:00:00</div>
+      <div class="timer-controls" id="timer-controls">
+        <button type="button" class="timer-btn" id="timer-toggle"><i class="ph ph-play"></i> Start</button>
+        <button type="button" class="timer-btn" id="timer-reset"><i class="ph ph-arrow-counter-clockwise"></i> Reset</button>
+        <button type="button" class="timer-btn" id="timer-close"><i class="ph ph-clock"></i> Clock</button>
+      </div>
       <div class="date" id="date">Loading...</div>
     </section>
 
@@ -1211,6 +1433,41 @@
     <button class="context-menu-item danger" id="ctx-delete"><i class="ph ph-trash"></i> Delete</button>
   </div>
 
+  <!-- DEDICATED ADD/EDIT SHORTCUT MODAL -->
+  <div class="md-dialog-overlay" id="shortcut-dialog-overlay">
+    <div class="md-dialog" style="max-width: 460px;">
+      <div class="dialog-header">
+        <h2 class="dialog-title" id="shortcut-dialog-title"><i class="ph ph-plus-circle"></i> Add Shortcut</h2>
+        <button class="md-icon-btn" id="close-shortcut-modal" style="width:36px; height:36px;">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+
+      <div class="form-field">
+        <div class="input-icon-wrapper">
+          <i class="ph ph-link"></i>
+          <input type="text" id="modal-shortcut-url" class="md-input" placeholder="Website URL (e.g. instagram.com)" />
+        </div>
+        <div class="input-icon-wrapper">
+          <i class="ph ph-tag"></i>
+          <input type="text" id="modal-shortcut-name" class="md-input" placeholder="Shortcut Name (e.g. Instagram)" />
+        </div>
+        <div class="input-icon-wrapper">
+          <i class="ph ph-image"></i>
+          <input type="text" id="modal-shortcut-icon" class="md-input" placeholder="Custom Favicon URL (Optional)" />
+        </div>
+        <div style="margin-top: 10px; margin-bottom: 16px;">
+          <label style="font-size:0.8rem; color:var(--md-on-surface-variant); display:block; margin-bottom:6px;">Or upload custom icon file:</label>
+          <input type="file" id="modal-shortcut-file" accept="image/*" style="font-size: 0.85rem; color: var(--md-on-surface-variant);" />
+        </div>
+
+        <button type="button" class="md-filled-button" id="modal-shortcut-save-btn">
+          <i class="ph ph-check"></i> Save Shortcut
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Material 3 Settings Dialog -->
   <div class="md-dialog-overlay" id="dialog-overlay">
     <div class="md-dialog">
@@ -1221,7 +1478,7 @@
         </button>
       </div>
 
-      <!-- Instant Offline Cache Section (Clean M3 Design) -->
+      <!-- Instant Offline Cache Section -->
       <div class="settings-section-title"><i class="ph ph-lightning"></i> Speed & Offline Cache</div>
       <div class="cache-card">
         <div class="cache-info">
@@ -1238,12 +1495,16 @@
         </div>
       </div>
 
-      <!-- Solid M3 Palette Picker -->
+      <!-- Solid M3 Palette Picker (Including OLED Black) -->
       <div class="settings-section-title"><i class="ph ph-palette"></i> Solid Theme Palette</div>
       <div class="theme-grid">
         <div class="theme-chip" data-theme-val="obsidian">
           <div class="theme-swatch" style="background:#191919;"></div>
           <span class="theme-name"><i class="ph ph-moon"></i> Obsidian</span>
+        </div>
+        <div class="theme-chip" data-theme-val="oled">
+          <div class="theme-swatch" style="background:#000000; border-color:#555;"></div>
+          <span class="theme-name"><i class="ph ph-circle"></i> OLED Pure Black</span>
         </div>
         <div class="theme-chip" data-theme-val="navy">
           <div class="theme-swatch" style="background:#10141d;"></div>
@@ -1259,29 +1520,66 @@
         </div>
       </div>
 
-      <!-- Add Shortcut Form (Auto-Fills Title) -->
-      <div class="settings-section-title"><i class="ph ph-plus-circle"></i> Add Shortcut (Keys 1–6)</div>
-      <div class="form-field">
-        <div class="input-icon-wrapper">
+      <!-- Custom Background Image Option -->
+      <div class="settings-section-title"><i class="ph ph-image"></i> Custom Background Wallpaper</div>
+      <div class="cache-card">
+        <div class="input-icon-wrapper" style="margin-bottom: 8px;">
           <i class="ph ph-link"></i>
-          <input type="text" id="shortcut-url" class="md-input" placeholder="Paste URL (e.g. github.com)" />
+          <input type="text" id="bg-url-input" class="md-input" placeholder="Image URL (e.g. https://...)" />
         </div>
-        <div class="input-icon-wrapper">
-          <i class="ph ph-tag"></i>
-          <input type="text" id="shortcut-name" class="md-input" placeholder="Title (Auto-filled or custom)" />
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <button type="button" class="md-filled-button" id="apply-bg-url-btn" style="flex:1;">
+            <i class="ph ph-check"></i> Apply URL
+          </button>
+          <button type="button" class="md-tonal-button danger" id="remove-bg-btn">
+            <i class="ph ph-trash"></i> Remove
+          </button>
         </div>
-        <button type="button" class="md-filled-button" id="add-btn">
-          <i class="ph ph-plus"></i> Add Shortcut
-        </button>
+        <label style="font-size:0.8rem; color:var(--md-on-surface-variant); display:block; margin-bottom:6px;">Or upload image from computer:</label>
+        <input type="file" id="bg-file-input" accept="image/*" style="font-size:0.85rem; color:var(--md-on-surface-variant);" />
       </div>
 
       <!-- Manage List -->
-      <div class="settings-section-title" style="margin-top: 20px;"><i class="ph ph-bookmarks"></i> Manage Shortcuts</div>
+      <div class="settings-section-title" style="margin-top: 20px;"><i class="ph ph-bookmarks"></i> Shortcuts Manager</div>
       <div class="form-field">
         <div class="shortcut-list" id="shortcut-list"></div>
       </div>
     </div>
   </div>
+
+  <!-- Scratchpad Drawer (Slide out on N) -->
+  <aside class="scratchpad-drawer" id="scratchpad-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title"><i class="ph ph-note"></i> Scratchpad</div>
+      <button class="md-icon-btn" id="close-scratchpad" style="width:34px; height:34px;">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+    <textarea class="scratchpad-textarea" id="scratchpad-text" placeholder="Type quick notes, to-dos or paste text here... (Autosaves)"></textarea>
+  </aside>
+
+  <!-- Cheat Sheet Modal (Press ?) -->
+  <div class="md-dialog-overlay" id="cheatsheet-overlay">
+    <div class="md-dialog" style="max-width: 480px;">
+      <div class="dialog-header">
+        <h2 class="dialog-title"><i class="ph ph-keyboard"></i> Keyboard Shortcuts</h2>
+        <button class="md-icon-btn" id="close-cheatsheet" style="width:36px; height:36px;"><i class="ph ph-x"></i></button>
+      </div>
+      <div class="cheat-grid">
+        <div class="cheat-item"><span>Focus / Unfocus Search</span><span class="cheat-key">/</span></div>
+        <div class="cheat-item"><span>Toggle Settings</span><span class="cheat-key">S</span></div>
+        <div class="cheat-item"><span>Toggle Notes Drawer</span><span class="cheat-key">N</span></div>
+        <div class="cheat-item"><span>Toggle Pomodoro Timer</span><span class="cheat-key">P</span></div>
+        <div class="cheat-item"><span>Open Shortcuts 1–6</span><span class="cheat-key">1–6</span></div>
+        <div class="cheat-item"><span>Autofill Suggested URL</span><span class="cheat-key">→ / Tab</span></div>
+        <div class="cheat-item"><span>Close / Dismiss</span><span class="cheat-key">Esc</span></div>
+        <div class="cheat-item"><span>Search Bangs</span><span class="cheat-key">!yt, !gh</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
 
   <script>
     const ENGINES = [
@@ -1293,7 +1591,6 @@
       { id: "github", name: "GitHub", url: "https://github.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" }
     ];
 
-    // DDG Search Bangs Configuration
     const BANGS = {
       "!yt": { name: "YouTube", url: "https://www.youtube.com/results?search_query=", icon: "https://www.google.com/s2/favicons?domain=youtube.com&sz=128" },
       "!gh": { name: "GitHub", url: "https://github.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" },
@@ -1362,7 +1659,45 @@
     let currentEngineId = localStorage.getItem("selected_engine") || "google";
     let shortcuts = JSON.parse(localStorage.getItem("shortcuts")) || DEFAULT_SHORTCUTS;
     let recentSearches = JSON.parse(localStorage.getItem("recent_searches")) || [];
+    let visitHistory = JSON.parse(localStorage.getItem("visit_history")) || [];
     let currentTheme = localStorage.getItem("app_theme") || "obsidian";
+    let editingShortcutIndex = null;
+
+    // --- Toast Notifications ---
+    function showToast(message, icon = "ph-info") {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `<i class="ph ${icon}"></i> <span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => toast.remove(), 200);
+      }, 2800);
+    }
+
+    // --- Smart Visit History Logger ---
+    function logVisit(url, title = "") {
+      if (!url || !isUrl(url)) return;
+      const fullUrl = formatUrl(url);
+      const existing = visitHistory.find(v => v.url === fullUrl);
+      if (existing) {
+        existing.count += 1;
+        existing.lastVisited = Date.now();
+        if (title && (!existing.title || existing.title === existing.url)) existing.title = title;
+      } else {
+        visitHistory.push({
+          url: fullUrl,
+          title: title || getSiteTitle(getDomain(fullUrl)),
+          domain: getDomain(fullUrl),
+          count: 1,
+          lastVisited: Date.now()
+        });
+      }
+      visitHistory.sort((a, b) => b.count - a.count);
+      if (visitHistory.length > 80) visitHistory = visitHistory.slice(0, 80);
+      localStorage.setItem("visit_history", JSON.stringify(visitHistory));
+    }
 
     function getActiveEngine() {
       return ENGINES.find(e => e.id === currentEngineId) || ENGINES[0];
@@ -1377,25 +1712,44 @@
       return domainPattern.test(str);
     }
 
+    // Smart Matcher: Checks Frequent Visits First, Then Shortcuts, Then Popular Sites
     function findMatchedSite(q) {
       q = q.trim().toLowerCase();
       if (!q) return null;
 
+      // 1. Prioritize Frequently Visited URLs (e.g. instagram.com/direct/inbox/)
+      const visitMatch = visitHistory.find(v => 
+        v.url.toLowerCase().includes(q) || 
+        v.title.toLowerCase().includes(q) || 
+        v.domain.toLowerCase().includes(q)
+      );
+      if (visitMatch && visitMatch.count >= 2) {
+        return { 
+          name: visitMatch.title, 
+          domain: visitMatch.domain, 
+          url: visitMatch.url, 
+          subtitle: visitMatch.url.replace(/^https?:\/\//i, ''),
+          visitCount: visitMatch.count 
+        };
+      }
+
+      // 2. User shortcuts
       for (let s of shortcuts) {
         let sName = s.name.toLowerCase();
         let sUrl = s.url.toLowerCase();
         if (sName.startsWith(q) || q === sName || sUrl.includes(q)) {
           let domain = getDomain(s.url);
-          return { name: s.name, domain: domain, url: formatUrl(s.url) };
+          return { name: s.name, domain: domain, url: formatUrl(s.url), subtitle: domain };
         }
       }
 
+      // 3. Popular sites directory
       for (let site of POPULAR_SITES) {
         if (site.aliases.some(alias => alias === q || alias.startsWith(q))) {
-          return site;
+          return { name: site.name, domain: site.domain, url: site.url, subtitle: site.domain };
         }
         if (site.name.toLowerCase().startsWith(q) || site.domain.startsWith(q)) {
-          return site;
+          return { name: site.name, domain: site.domain, url: site.url, subtitle: site.domain };
         }
       }
       return null;
@@ -1428,6 +1782,7 @@
 
     function getFavicon(url, item = null) {
       if (item && item.cachedIcon) return item.cachedIcon;
+      if (item && item.customIcon) return item.customIcon;
       return `https://www.google.com/s2/favicons?domain=${getDomain(url)}&sz=128`;
     }
 
@@ -1435,12 +1790,11 @@
       return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
     }
 
-    // --- Math & Currency/Unit Calculator ---
+    // --- Math & Unit Calculator ---
     function evaluateMathOrConversion(str) {
       str = str.trim();
       if (!str) return null;
 
-      // Percentage: e.g. "25% of 800"
       const pctMatch = str.match(/^([\d.]+)\s*%\s*(?:of|\*)\s*([\d.]+)$/i);
       if (pctMatch) {
         const p = parseFloat(pctMatch[1]);
@@ -1448,14 +1802,12 @@
         return { expr: `${p}% of ${tot}`, result: formatNum((p / 100) * tot) };
       }
 
-      // Square root: e.g. "sqrt(144)" or "sqrt 144"
       const sqrtMatch = str.match(/^sqrt\s*\(?\s*([\d.]+)\s*\)?$/i);
       if (sqrtMatch) {
         const val = parseFloat(sqrtMatch[1]);
         return { expr: `√${val}`, result: formatNum(Math.sqrt(val)) };
       }
 
-      // Unit Conversions: e.g. "100 c to f", "10 km to miles"
       const unitMatch = str.match(/^([\d.]+)\s*([a-zA-Z]+)\s+(?:to|in)\s+([a-zA-Z]+)$/i);
       if (unitMatch) {
         const val = parseFloat(unitMatch[1]);
@@ -1465,7 +1817,6 @@
         if (res !== null) return { expr: `${val} ${unitMatch[2]} → ${unitMatch[3]}`, result: res };
       }
 
-      // Safe Arithmetic Evaluation
       if (/^[0-9+\-*/().\s^%]+$/.test(str) && /[+\-*/^%]/.test(str)) {
         if (/[+\-*/^%]$/.test(str.trim())) return null;
         try {
@@ -1494,18 +1845,115 @@
       return null;
     }
 
-    // --- Live Clock ---
+    // --- Live Clock & Pomodoro Timer ---
+    let pomodoroActive = false;
+    let pomodoroTime = 25 * 60;
+    let pomodoroInterval = null;
+    const clockEl = document.getElementById('clock');
+    const timerControls = document.getElementById('timer-controls');
+    const timerToggleBtn = document.getElementById('timer-toggle');
+
     function updateClock() {
+      if (pomodoroActive) return;
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
       const m = String(now.getMinutes()).padStart(2, '0');
       const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+      clockEl.textContent = `${h}:${m}:${s}`;
       const options = { weekday: 'long', month: 'short', day: 'numeric' };
       document.getElementById('date').textContent = now.toLocaleDateString(undefined, options);
     }
     updateClock();
     setInterval(updateClock, 1000);
+
+    function togglePomodoroMode() {
+      pomodoroActive = !pomodoroActive;
+      timerControls.classList.toggle('active', pomodoroActive);
+      if (pomodoroActive) {
+        renderPomodoroTime();
+        document.getElementById('date').textContent = "Focus Timer (25 Minutes)";
+      } else {
+        clearInterval(pomodoroInterval);
+        pomodoroInterval = null;
+        updateClock();
+      }
+    }
+
+    function renderPomodoroTime() {
+      const mins = String(Math.floor(pomodoroTime / 60)).padStart(2, '0');
+      const secs = String(pomodoroTime % 60).padStart(2, '0');
+      clockEl.textContent = `${mins}:${secs}`;
+    }
+
+    clockEl.addEventListener('click', togglePomodoroMode);
+    document.getElementById('timer-close').addEventListener('click', togglePomodoroMode);
+
+    timerToggleBtn.addEventListener('click', () => {
+      if (pomodoroInterval) {
+        clearInterval(pomodoroInterval);
+        pomodoroInterval = null;
+        timerToggleBtn.innerHTML = `<i class="ph ph-play"></i> Start`;
+      } else {
+        timerToggleBtn.innerHTML = `<i class="ph ph-pause"></i> Pause`;
+        pomodoroInterval = setInterval(() => {
+          if (pomodoroTime > 0) {
+            pomodoroTime--;
+            renderPomodoroTime();
+          } else {
+            clearInterval(pomodoroInterval);
+            pomodoroInterval = null;
+            showToast("Focus time finished! Take a 5-minute break.", "ph-bell");
+          }
+        }, 1000);
+      }
+    });
+
+    document.getElementById('timer-reset').addEventListener('click', () => {
+      clearInterval(pomodoroInterval);
+      pomodoroInterval = null;
+      pomodoroTime = 25 * 60;
+      renderPomodoroTime();
+      timerToggleBtn.innerHTML = `<i class="ph ph-play"></i> Start`;
+    });
+
+    // --- Background Wallpapers ---
+    function applyBackground(bg) {
+      if (bg) {
+        document.body.style.backgroundImage = `url("${bg}")`;
+        document.body.classList.add("has-custom-bg");
+      } else {
+        document.body.style.backgroundImage = "";
+        document.body.classList.remove("has-custom-bg");
+      }
+    }
+    applyBackground(localStorage.getItem("custom_bg"));
+
+    document.getElementById("apply-bg-url-btn").addEventListener("click", () => {
+      const url = document.getElementById("bg-url-input").value.trim();
+      if (url) {
+        localStorage.setItem("custom_bg", url);
+        applyBackground(url);
+        showToast("Custom background URL applied!", "ph-check");
+      }
+    });
+
+    document.getElementById("bg-file-input").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        localStorage.setItem("custom_bg", reader.result);
+        applyBackground(reader.result);
+        showToast("Background image uploaded!", "ph-image");
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("remove-bg-btn").addEventListener("click", () => {
+      localStorage.removeItem("custom_bg");
+      applyBackground(null);
+      showToast("Background reset to theme", "ph-arrow-counter-clockwise");
+    });
 
     // --- Theme Management ---
     function applyTheme(theme) {
@@ -1585,7 +2033,8 @@
           <span class="shortcut-name">${item.name}</span>
         `;
 
-        // Drag & Drop Listeners
+        card.addEventListener("click", () => logVisit(item.url, item.name));
+
         card.addEventListener("dragstart", (e) => {
           draggedIndex = index;
           card.classList.add("dragging");
@@ -1617,7 +2066,6 @@
           }
         });
 
-        // Right Click Context Menu
         card.addEventListener("contextmenu", (e) => {
           e.preventDefault();
           showContextMenu(e.clientX, e.clientY, index);
@@ -1625,12 +2073,14 @@
 
         grid.appendChild(card);
 
-        // Management row in Settings
         const row = document.createElement("div");
         row.className = "shortcut-list-item";
         row.innerHTML = `
           <img src="${getFavicon(item.url, item)}" alt="">
           <span>${item.name}</span>
+          <button class="del-btn" onclick="openEditShortcutModal(${index})" title="Edit" style="color:var(--md-primary); margin-right:4px;">
+            <i class="ph ph-pencil-simple"></i>
+          </button>
           <button class="del-btn" onclick="removeShortcut(${index})" title="Delete">
             <i class="ph ph-trash"></i>
           </button>
@@ -1638,7 +2088,7 @@
         list.appendChild(row);
       });
 
-      // '+' Button Tile
+      // Dedicated Add '+' Button in Grid
       const addTile = document.createElement("button");
       addTile.type = "button";
       addTile.className = "md-shortcut-card add-shortcut-card";
@@ -1650,10 +2100,7 @@
         </div>
         <span class="shortcut-name">Add</span>
       `;
-      addTile.addEventListener("click", () => {
-        dialog.classList.add("active");
-        setTimeout(() => document.getElementById("shortcut-url").focus(), 100);
-      });
+      addTile.addEventListener("click", () => openAddShortcutModal());
       grid.appendChild(addTile);
     }
 
@@ -1661,31 +2108,84 @@
       shortcuts.splice(index, 1);
       localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
       renderShortcuts();
+      showToast("Shortcut removed", "ph-trash");
     };
 
-    // Auto-fetch Title on URL input in Settings
-    const shortcutUrlInput = document.getElementById("shortcut-url");
-    const shortcutNameInput = document.getElementById("shortcut-name");
+    // --- Dedicated Add/Edit Shortcut Modal ---
+    const shortcutModal = document.getElementById("shortcut-dialog-overlay");
+    const modalUrl = document.getElementById("modal-shortcut-url");
+    const modalName = document.getElementById("modal-shortcut-name");
+    const modalIcon = document.getElementById("modal-shortcut-icon");
+    const modalFile = document.getElementById("modal-shortcut-file");
+    const modalSaveBtn = document.getElementById("modal-shortcut-save-btn");
 
-    shortcutUrlInput.addEventListener("input", (e) => {
+    function openAddShortcutModal() {
+      editingShortcutIndex = null;
+      document.getElementById("shortcut-dialog-title").innerHTML = `<i class="ph ph-plus-circle"></i> Add Shortcut`;
+      modalUrl.value = "";
+      modalName.value = "";
+      modalIcon.value = "";
+      modalFile.value = "";
+      shortcutModal.classList.add("active");
+      setTimeout(() => modalUrl.focus(), 80);
+    }
+
+    window.openEditShortcutModal = function(index) {
+      editingShortcutIndex = index;
+      const s = shortcuts[index];
+      document.getElementById("shortcut-dialog-title").innerHTML = `<i class="ph ph-pencil-simple"></i> Edit Shortcut`;
+      modalUrl.value = s.url;
+      modalName.value = s.name;
+      modalIcon.value = s.customIcon || "";
+      modalFile.value = "";
+      shortcutModal.classList.add("active");
+      setTimeout(() => modalName.focus(), 80);
+    };
+
+    document.getElementById("close-shortcut-modal").addEventListener("click", () => shortcutModal.classList.remove("active"));
+
+    modalUrl.addEventListener("input", (e) => {
       const val = e.target.value.trim();
-      if (val && !shortcutNameInput.value.trim()) {
-        const domain = getDomain(val);
-        shortcutNameInput.value = getSiteTitle(domain);
+      if (val && !modalName.value.trim()) {
+        modalName.value = getSiteTitle(getDomain(val));
       }
     });
 
-    document.getElementById("add-btn").addEventListener("click", () => {
-      const url = shortcutUrlInput.value.trim();
-      let name = shortcutNameInput.value.trim();
+    modalSaveBtn.addEventListener("click", () => {
+      const url = modalUrl.value.trim();
+      let name = modalName.value.trim();
+      const customIconUrl = modalIcon.value.trim();
+      const file = modalFile.files[0];
 
-      if (url) {
-        if (!name) name = getSiteTitle(getDomain(url));
-        shortcuts.push({ name, url });
+      if (!url) {
+        showToast("Please enter a valid URL", "ph-warning");
+        return;
+      }
+      if (!name) name = getSiteTitle(getDomain(url));
+
+      const saveItem = (iconData = null) => {
+        const itemObj = { name, url: formatUrl(url) };
+        if (iconData) itemObj.customIcon = iconData;
+        else if (customIconUrl) itemObj.customIcon = customIconUrl;
+
+        if (editingShortcutIndex !== null) {
+          shortcuts[editingShortcutIndex] = itemObj;
+          showToast("Shortcut updated!", "ph-check");
+        } else {
+          shortcuts.push(itemObj);
+          showToast("Shortcut added!", "ph-check");
+        }
         localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
         renderShortcuts();
-        shortcutUrlInput.value = "";
-        shortcutNameInput.value = "";
+        shortcutModal.classList.remove("active");
+      };
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => saveItem(reader.result);
+        reader.readAsDataURL(file);
+      } else {
+        saveItem();
       }
     });
 
@@ -1701,18 +2201,15 @@
     }
 
     document.getElementById("ctx-open-newtab").addEventListener("click", () => {
-      if (activeCtxIndex !== null) window.open(formatUrl(shortcuts[activeCtxIndex].url), '_blank');
+      if (activeCtxIndex !== null) {
+        logVisit(shortcuts[activeCtxIndex].url, shortcuts[activeCtxIndex].name);
+        window.open(formatUrl(shortcuts[activeCtxIndex].url), '_blank');
+      }
       ctxMenu.classList.remove("active");
     });
 
     document.getElementById("ctx-edit").addEventListener("click", () => {
-      if (activeCtxIndex !== null) {
-        const s = shortcuts[activeCtxIndex];
-        shortcutUrlInput.value = s.url;
-        shortcutNameInput.value = s.name;
-        removeShortcut(activeCtxIndex);
-        dialog.classList.add("active");
-      }
+      if (activeCtxIndex !== null) openEditShortcutModal(activeCtxIndex);
       ctxMenu.classList.remove("active");
     });
 
@@ -1732,7 +2229,6 @@
     let currentAutofillValue = "";
 
     function fetchSuggestions(query) {
-      // 1. Dynamic Bang Detection & Engine Icon Switching
       const bangKey = Object.keys(BANGS).find(b => query.startsWith(b));
       if (bangKey) {
         activeEngineIcon.src = BANGS[bangKey].icon;
@@ -1740,13 +2236,11 @@
         activeEngineIcon.src = getActiveEngine().icon;
       }
 
-      // Empty Query -> Render Recent Searches
       if (!query || query.trim() === '') {
         renderRecentSearches();
         return;
       }
 
-      // Instant Local Evaluation (Math & Matched Sites)
       const mathRes = evaluateMathOrConversion(query);
       const matchedSite = isUrl(query) ? null : findMatchedSite(query);
 
@@ -1754,7 +2248,6 @@
         renderDropdownCombined(query, [], matchedSite, mathRes);
       }
 
-      // Google JSONP Autocomplete
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         if (currentScript) currentScript.remove();
@@ -1792,7 +2285,7 @@
       header.className = "dropdown-section-label";
       header.innerHTML = `
         <span>Recent Searches</span>
-        <button type="button" class="clear-recent-history-btn" id="clear-all-recents">Clear All</button>
+        <button type="button" class="clear-recent-history-btn" id="clear-all-recents"><i class="ph ph-trash"></i> Clear All</button>
       `;
       suggestionsBox.appendChild(header);
 
@@ -1801,6 +2294,7 @@
         recentSearches = [];
         localStorage.setItem("recent_searches", JSON.stringify(recentSearches));
         closeSuggestions();
+        showToast("Search history cleared", "ph-trash");
       });
 
       recentSearches.forEach((itemText, idx) => {
@@ -1857,14 +2351,14 @@
         calcEl.querySelector("#calc-copy").addEventListener("mousedown", (e) => {
           e.preventDefault();
           navigator.clipboard.writeText(mathRes.result);
-          calcEl.querySelector("#calc-copy").innerHTML = `<i class="ph ph-check"></i> Copied`;
+          showToast("Copied to clipboard!", "ph-copy");
         });
         suggestionsBox.appendChild(calcEl);
       }
 
-      // B. Top Hit Card (URL or e.g. "Discord" / "ins")
+      // B. Top Hit Card (Frequent Visit Priority or Direct URL)
       if (queryIsUrl || matchedSite) {
-        let fullUrl, domain, title, subtitle;
+        let fullUrl, domain, title, subtitle, freqBadge = "";
 
         if (queryIsUrl) {
           fullUrl = formatUrl(query);
@@ -1876,8 +2370,11 @@
           fullUrl = formatUrl(matchedSite.url);
           domain = matchedSite.domain;
           title = matchedSite.name;
-          subtitle = matchedSite.domain;
+          subtitle = matchedSite.subtitle || matchedSite.domain;
           currentAutofillValue = matchedSite.domain;
+          if (matchedSite.visitCount) {
+            freqBadge = `<span class="visit-freq-badge">${matchedSite.visitCount} visits</span>`;
+          }
         }
 
         const topHitItem = {
@@ -1894,12 +2391,13 @@
         topHitEl.className = "top-hit-item selected";
         topHitEl.innerHTML = `
           <img src="${topHitItem.icon}" class="top-hit-favicon" alt="">
-          <span class="top-hit-title">${escapeHtml(topHitItem.title)}</span>
+          <span class="top-hit-title">${escapeHtml(topHitItem.title)} ${freqBadge}</span>
           <span class="top-hit-domain">— ${escapeHtml(topHitItem.subtitle)}</span>
           <span class="top-hit-tag"><i class="ph ph-arrow-up-right"></i> Visit</span>
         `;
         topHitEl.addEventListener("mousedown", (e) => {
           e.preventDefault();
+          logVisit(fullUrl, title);
           window.location.assign(fullUrl);
         });
         suggestionsBox.appendChild(topHitEl);
@@ -1908,7 +2406,7 @@
         selectedDropdownIndex = -1;
       }
 
-      // C. Search Suggestions (Bold Completion)
+      // C. Search Suggestions (Bold Autocomplete Completion)
       searchSuggestions.forEach((text) => {
         const itemObj = { type: 'search', text: text };
         const itemIndex = currentDropdownItems.length;
@@ -1939,7 +2437,7 @@
         suggestionsBox.appendChild(sugEl);
       });
 
-      // D. Quick Links
+      // D. Quick Links & Deep Links
       const domainKey = (matchedSite ? matchedSite.domain : getDomain(query)).replace(/^www\./, '').toLowerCase();
       let quickLinks = POPULAR_DEEP_LINKS[domainKey] ? [...POPULAR_DEEP_LINKS[domainKey]] : [];
 
@@ -1955,12 +2453,12 @@
       if (quickLinks.length > 0) {
         const headerEl = document.createElement("div");
         headerEl.className = "dropdown-section-label";
-        headerEl.textContent = "Quick Links";
+        headerEl.innerHTML = `<span>Quick Links</span>`;
         suggestionsBox.appendChild(headerEl);
 
         quickLinks.slice(0, 3).forEach(link => {
           const itemIndex = currentDropdownItems.length;
-          currentDropdownItems.push({ type: 'url', url: link.url });
+          currentDropdownItems.push({ type: 'url', url: link.url, title: link.title });
 
           const qlEl = document.createElement("div");
           qlEl.className = "quick-link-item";
@@ -1972,6 +2470,7 @@
           `;
           qlEl.addEventListener("mousedown", (e) => {
             e.preventDefault();
+            logVisit(link.url, link.title);
             window.location.assign(formatUrl(link.url));
           });
           suggestionsBox.appendChild(qlEl);
@@ -2010,7 +2509,7 @@
       const raw = input.value.trim();
       if (!raw) return;
 
-      // 1. Check Bangs (e.g. "!yt lofi")
+      // 1. Bangs
       for (let b in BANGS) {
         if (raw.startsWith(b)) {
           const cleanQuery = raw.slice(b.length).trim();
@@ -2019,10 +2518,11 @@
         }
       }
 
-      // 2. Highlighted item in dropdown
+      // 2. Selected item in dropdown
       if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
         const item = currentDropdownItems[selectedDropdownIndex];
         if (item.type === 'url') {
+          logVisit(item.url, item.title);
           window.location.assign(item.url);
           return;
         } else {
@@ -2033,18 +2533,20 @@
 
       // 3. Direct URL
       if (isUrl(raw)) {
+        logVisit(raw);
         window.location.assign(formatUrl(raw));
         return;
       }
 
-      // 4. Auto-detected site (e.g. typing "Discord" or "ins")
+      // 4. Frequent or Auto-Detected Site
       const matched = findMatchedSite(raw);
       if (matched) {
+        logVisit(matched.url, matched.name);
         window.location.assign(formatUrl(matched.url));
         return;
       }
 
-      // 5. Default search engine
+      // 5. Default Search
       executeSearchWithText(raw);
     }
 
@@ -2065,20 +2567,48 @@
       fetchSuggestions(input.value.trim());
     });
 
-    // --- Keyboard Navigation: Arrows, Autofill & Shortcuts ---
+    // --- Keyboard Navigation (S, N, P, ?, Arrows, Shortcuts) ---
     const dialog = document.getElementById("dialog-overlay");
+    const scratchpad = document.getElementById("scratchpad-drawer");
+    const cheatsheet = document.getElementById("cheatsheet-overlay");
 
     window.addEventListener("keydown", (e) => {
-      const isModalOpen = dialog.classList.contains("active");
+      const isInputActive = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+      const isSettingsOpen = dialog.classList.contains("active");
+      const isShortcutModalOpen = shortcutModal.classList.contains("active");
+      const isCheatOpen = cheatsheet.classList.contains("active");
 
-      // Press 'S' to open settings (when not typing in search)
-      if ((e.key === "s" || e.key === "S") && document.activeElement !== input && !isModalOpen) {
+      // 'S' TO TOGGLE SETTINGS (Opens & Closes on S)
+      if ((e.key === "s" || e.key === "S") && !isInputActive && !isShortcutModalOpen && !isCheatOpen) {
         e.preventDefault();
-        dialog.classList.add("active");
+        dialog.classList.toggle("active");
+        if (dialog.classList.contains("active")) updateCacheUI();
         return;
       }
 
-      // Right Arrow (->) or Tab Key Autofill (e.g. typing "Discord" -> autofills "discord.com")
+      // 'N' TO TOGGLE SCRATCHPAD
+      if ((e.key === "n" || e.key === "N") && !isInputActive && !isSettingsOpen) {
+        e.preventDefault();
+        scratchpad.classList.toggle("open");
+        if (scratchpad.classList.contains("open")) document.getElementById("scratchpad-text").focus();
+        return;
+      }
+
+      // 'P' TO TOGGLE POMODORO TIMER
+      if ((e.key === "p" || e.key === "P") && !isInputActive) {
+        e.preventDefault();
+        togglePomodoroMode();
+        return;
+      }
+
+      // '?' TO TOGGLE HOTKEY CHEATSHEET
+      if (e.key === "?" && !isInputActive) {
+        e.preventDefault();
+        cheatsheet.classList.toggle("active");
+        return;
+      }
+
+      // Right Arrow (->) or Tab Key Autofill
       if ((e.key === "ArrowRight" || e.key === "Tab") && document.activeElement === input) {
         if (currentAutofillValue && input.value.trim() !== currentAutofillValue) {
           e.preventDefault();
@@ -2089,7 +2619,7 @@
       }
 
       // '/' Toggle Focus
-      if (e.key === "/" && !isModalOpen) {
+      if (e.key === "/" && !isSettingsOpen && !isShortcutModalOpen && !isCheatOpen) {
         if (document.activeElement === input) {
           if (input.value.trim() === "") {
             e.preventDefault();
@@ -2105,10 +2635,11 @@
       }
 
       // Number Keys 1-6 for shortcuts
-      if (!isModalOpen && document.activeElement !== input) {
+      if (!isInputActive && !isSettingsOpen && !isShortcutModalOpen && !isCheatOpen) {
         const num = parseInt(e.key, 10);
         if (!isNaN(num) && num >= 1 && num <= 6 && num <= shortcuts.length) {
           e.preventDefault();
+          logVisit(shortcuts[num - 1].url, shortcuts[num - 1].name);
           window.location.assign(formatUrl(shortcuts[num - 1].url));
           return;
         }
@@ -2133,8 +2664,14 @@
       if (e.key === "Escape") {
         if (dropdown.classList.contains("open")) {
           dropdown.classList.remove("open");
-        } else if (isModalOpen) {
+        } else if (isSettingsOpen) {
           dialog.classList.remove("active");
+        } else if (isShortcutModalOpen) {
+          shortcutModal.classList.remove("active");
+        } else if (isCheatOpen) {
+          cheatsheet.classList.remove("active");
+        } else if (scratchpad.classList.contains("open")) {
+          scratchpad.classList.remove("open");
         } else if (suggestionsBox.classList.contains("active")) {
           closeSuggestions();
         } else if (document.activeElement === input) {
@@ -2164,6 +2701,18 @@
         }
       }
     });
+
+    // Scratchpad Auto-Save
+    const scratchText = document.getElementById("scratchpad-text");
+    scratchText.value = localStorage.getItem("quick_notes") || "";
+    scratchText.addEventListener("input", (e) => localStorage.setItem("quick_notes", e.target.value));
+    document.getElementById("open-scratchpad").addEventListener("click", () => scratchpad.classList.toggle("open"));
+    document.getElementById("close-scratchpad").addEventListener("click", () => scratchpad.classList.remove("open"));
+
+    // Cheatsheet
+    document.getElementById("open-cheatsheet").addEventListener("click", () => cheatsheet.classList.add("active"));
+    document.getElementById("close-cheatsheet").addEventListener("click", () => cheatsheet.classList.remove("active"));
+    cheatsheet.addEventListener("click", (e) => { if (e.target === cheatsheet) cheatsheet.classList.remove("active"); });
 
     // =========================================================
     // INSTANT CACHE ENGINE
@@ -2227,12 +2776,12 @@
 
         updateCacheUI();
         cacheBtn.disabled = false;
-        alert("Success! Fonts, Phosphor icons, and favicons are cached locally. The page will now load in 0ms.");
+        showToast("Cached 100% locally! 0ms instant startup ready.", "ph-lightning");
       } catch (err) {
         console.error(err);
         cacheBtn.disabled = false;
         updateCacheUI();
-        alert("Failed to complete cache. Check internet connection.");
+        showToast("Failed to complete cache. Check internet connection.", "ph-warning");
       }
     }
 
@@ -2244,7 +2793,7 @@
       localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
       renderShortcuts();
       updateCacheUI();
-      alert("Cache cleared. Assets will stream from CDN.");
+      showToast("Cache cleared! Streaming from CDN.", "ph-trash");
     });
 
     document.getElementById("open-settings").addEventListener("click", () => {
