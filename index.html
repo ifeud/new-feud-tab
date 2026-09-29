@@ -5,14 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Tab</title>
 
-  <!-- Official Material UI Font: Roboto -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
-
-  <!-- Phosphor Icons -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
   <style>
     /* =========================================================
        SOLID M3 THEME TOKENS (Strictly Zero Gradients)
@@ -86,8 +78,11 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Roboto', sans-serif;
+      /* Speed of Light: Native System Font (0ms Network Latency) */
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       outline: none !important;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     body {
@@ -101,6 +96,15 @@
       overflow: hidden;
       user-select: none;
       transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
     }
 
     /* Top Action Button */
@@ -123,7 +127,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
       cursor: pointer;
       transition: background-color 0.15s ease, color 0.15s ease;
     }
@@ -228,15 +231,17 @@
       color: var(--md-on-surface);
     }
 
-    .engine-trigger-btn img {
+    .engine-trigger-btn .engine-svg-icon {
       width: 22px;
       height: 22px;
-      border-radius: 9999px;
-      object-fit: contain;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .caret-icon {
-      font-size: 0.85rem;
+      width: 14px;
+      height: 14px;
       transition: transform var(--apple-duration) var(--apple-ease);
     }
 
@@ -289,17 +294,16 @@
       color: var(--md-primary);
     }
 
-    .dropdown-item img {
+    .dropdown-item .engine-svg-icon {
       width: 20px;
       height: 20px;
       margin-right: 12px;
-      border-radius: 4px;
-      object-fit: contain;
     }
 
     .dropdown-item .check-icon {
       margin-left: auto;
-      font-size: 1.1rem;
+      width: 16px;
+      height: 16px;
       color: var(--md-primary);
       opacity: 0;
       transform: scale(0.7);
@@ -325,7 +329,7 @@
       color: #72747d;
     }
 
-    /* Trailing Actions: Keyboard / Badge & Submit Arrow */
+    /* Trailing Actions */
     .kbd-badge {
       display: inline-flex;
       align-items: center;
@@ -355,7 +359,6 @@
       color: var(--md-on-surface);
       cursor: pointer;
       margin-left: 6px;
-      font-size: 1.25rem;
       transition: background-color 0.15s ease, transform 0.15s ease;
     }
 
@@ -415,7 +418,7 @@
       gap: 12px;
       cursor: pointer;
       margin-bottom: 4px;
-      transition: background-color 0.15s ease, transform 0.15s ease;
+      transition: background-color 0.15s ease;
     }
 
     .top-hit-item:hover, .top-hit-item.selected {
@@ -474,7 +477,6 @@
     }
 
     .suggestion-icon {
-      font-size: 1.15rem;
       color: var(--md-on-surface-variant);
       display: flex;
       align-items: center;
@@ -821,7 +823,6 @@
       align-items: center;
       padding: 4px;
       border-radius: 9999px;
-      font-size: 1.15rem;
     }
 
     .del-btn:hover {
@@ -834,7 +835,7 @@
   <!-- Top Action Button -->
   <header class="top-bar">
     <button class="md-icon-btn" id="open-settings" aria-label="Settings">
-      <i class="ph ph-gear"></i>
+      <svg class="icon" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84V125.84a16,16,0,0,0-12.87-15.71l-15.54-3.11a79.52,79.52,0,0,0-7.89-19l8.6-13.33a16,16,0,0,0-2.45-20.15l-14.14-14.14a16,16,0,0,0-20.15-2.45l-13.33,8.6a79.52,79.52,0,0,0-19-7.89l-3.11-15.54A16,16,0,0,0,106.16,8H93.84a16,16,0,0,0-15.71,12.87L75,36.41a79.52,79.52,0,0,0-19,7.89l-13.33-8.6a16,16,0,0,0-20.15,2.45L28.38,52.29a16,16,0,0,0-2.45,20.15l8.6,13.33a79.52,79.52,0,0,0-7.89,19L11.1,107.87A16,16,0,0,0,8,123.84v12.32a16,16,0,0,0,12.87,15.71l15.54,3.11a79.52,79.52,0,0,0,7.89,19l-8.6,13.33a16,16,0,0,0,2.45,20.15l14.14,14.14a16,16,0,0,0,20.15,2.45l13.33-8.6a79.52,79.52,0,0,0,19,7.89l3.11,15.54A16,16,0,0,0,93.84,248h12.32a16,16,0,0,0,15.71-12.87l3.11-15.54a79.52,79.52,0,0,0,19-7.89l13.33,8.6a16,16,0,0,0,20.15-2.45l14.14-14.14a16,16,0,0,0,2.45-20.15l-8.6-13.33a79.52,79.52,0,0,0,7.89-19l15.54-3.11A16,16,0,0,0,216,130.16Z"/></svg>
     </button>
   </header>
 
@@ -842,8 +843,8 @@
   <main class="center-stage">
     <!-- Live Clock & Date -->
     <section class="clock-section" id="clock-section">
-      <div class="time" id="clock">00:00:00</div>
-      <div class="date" id="date">Loading...</div>
+      <div class="time" id="clock"></div>
+      <div class="date" id="date"></div>
     </section>
 
     <!-- M3 Pill Search Bar (Dead-Center Anchor) -->
@@ -853,8 +854,8 @@
         <!-- Custom Engine Dropdown Trigger -->
         <div class="custom-dropdown" id="engine-dropdown">
           <button type="button" class="engine-trigger-btn" id="engine-trigger" aria-label="Choose Search Engine">
-            <img id="active-engine-icon" src="" alt="Engine" />
-            <i class="ph ph-caret-down caret-icon"></i>
+            <span class="engine-svg-icon" id="active-engine-icon"></span>
+            <svg class="caret-icon" viewBox="0 0 256 256"><path fill="currentColor" d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>
           </button>
 
           <div class="custom-dropdown-menu" id="engine-menu"></div>
@@ -870,7 +871,7 @@
         
         <div class="kbd-badge" id="kbd-badge">/</div>
         <button type="submit" class="submit-arrow-btn" id="submit-arrow" title="Visit / Search">
-          <i class="ph ph-arrow-right"></i>
+          <svg class="icon" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg>
         </button>
       </div>
 
@@ -886,9 +887,12 @@
   <div class="md-dialog-overlay" id="dialog-overlay">
     <div class="md-dialog">
       <div class="dialog-header">
-        <h2 class="dialog-title"><i class="ph ph-sliders-horizontal"></i> Preferences</h2>
+        <h2 class="dialog-title">
+          <svg class="icon" viewBox="0 0 256 256"><path d="M120,40a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16h72A8,8,0,0,1,120,40Zm96,72H168a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Zm-16,80H40a8,8,0,0,0,0,16H184a8,8,0,0,0,0-16ZM144,24a24,24,0,0,0-24,24v0a24,24,0,0,0,24,24h0a24,24,0,0,0,24-24v0A24,24,0,0,0,144,24Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,144,56ZM88,96a24,24,0,0,0-24,24v0a24,24,0,0,0,24,24h0a24,24,0,0,0,24-24v0A24,24,0,0,0,88,96Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,88,128Zm120,56a24,24,0,0,0-24,24v0a24,24,0,0,0,24,24h0a24,24,0,0,0,24-24v0A24,24,0,0,0,208,184Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,208,216Z"/></svg>
+          Preferences
+        </h2>
         <button class="md-icon-btn" id="close-settings" style="width:36px; height:36px;">
-          <i class="ph ph-x"></i>
+          <svg class="icon" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
         </button>
       </div>
 
@@ -919,7 +923,8 @@
         <input type="text" id="shortcut-name" class="md-input" placeholder="Title (e.g. YouTube)" style="margin-bottom: 8px;" />
         <input type="text" id="shortcut-url" class="md-input" placeholder="URL (e.g. youtube.com)" style="margin-bottom: 12px;" />
         <button type="button" class="md-filled-button" id="add-btn">
-          <i class="ph ph-plus"></i> Add Shortcut
+          <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+          Add Shortcut
         </button>
       </div>
 
@@ -932,17 +937,25 @@
   </div>
 
   <script>
-    // Search Engines Configuration
+    // Embedded Vector SVGs (0ms Network Latency, 100% Offline)
+    const ENGINE_SVGS = {
+      google: `<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.44 7.34 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.57H1.25C.45 8.16 0 9.98 0 12s.45 3.84 1.25 5.43l4.03-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.28 2.56 1.25 6.57l4.03 3.14c.95-2.83 3.6-4.96 6.72-4.96z"/></svg>`,
+      duckduckgo: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#DE5833"/><path d="M11 7h2v6h-2zm0 8h2v2h-2z" fill="#FFF"/></svg>`,
+      brave: `<svg viewBox="0 0 24 24"><path fill="#FB542B" d="M12 0l7.24 4.54-1.28 7.37L12 24l-5.96-12.09L4.76 4.54 12 0z"/></svg>`,
+      bing: `<svg viewBox="0 0 24 24"><path fill="#008373" d="m3.84 0 5.48 1.93v16.14l7.15-4.14-3.57-2.38-2.22 1.48V7.5l9.48 4.7v5.93l-10.89 5.87L3.84 20.4z"/></svg>`,
+      youtube: `<svg viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.376.55 9.376.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><polygon fill="#FFF" points="9.545 15.568 15.795 12 9.545 8.432"/></svg>`,
+      github: `<svg viewBox="0 0 24 24"><path fill="#FFF" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>`
+    };
+
     const ENGINES = [
-      { id: "google", name: "Google", url: "https://www.google.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=google.com&sz=128" },
-      { id: "duckduckgo", name: "DuckDuckGo", url: "https://duckduckgo.com/?q=", icon: "https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=128" },
-      { id: "brave", name: "Brave", url: "https://search.brave.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=brave.com&sz=128" },
-      { id: "bing", name: "Bing", url: "https://www.bing.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=bing.com&sz=128" },
-      { id: "youtube", name: "YouTube", url: "https://www.youtube.com/results?search_query=", icon: "https://www.google.com/s2/favicons?domain=youtube.com&sz=128" },
-      { id: "github", name: "GitHub", url: "https://github.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" }
+      { id: "google", name: "Google", url: "https://www.google.com/search?q=" },
+      { id: "duckduckgo", name: "DuckDuckGo", url: "https://duckduckgo.com/?q=" },
+      { id: "brave", name: "Brave", url: "https://search.brave.com/search?q=" },
+      { id: "bing", name: "Bing", url: "https://www.bing.com/search?q=" },
+      { id: "youtube", name: "YouTube", url: "https://www.youtube.com/results?search_query=" },
+      { id: "github", name: "GitHub", url: "https://github.com/search?q=" }
     ];
 
-    // Popular platform deep links (like in Firefox Suggest)
     const POPULAR_DEEP_LINKS = {
       'instagram.com': [
         { title: 'Instagram • Messages', url: 'https://instagram.com/direct/inbox/' },
@@ -979,7 +992,6 @@
       return ENGINES.find(e => e.id === currentEngineId) || ENGINES[0];
     }
 
-    // --- Strict URL Detection ---
     function isUrl(str) {
       str = str.trim();
       if (/^https?:\/\//i.test(str)) return true;
@@ -992,9 +1004,7 @@
     function formatUrl(url) {
       url = url.trim();
       if (/^https?:\/\//i.test(url)) return url;
-      if (/^localhost/i.test(url) || /^\d{1,3}(\.\d{1,3}){3}/.test(url)) {
-        return 'http://' + url;
-      }
+      if (/^localhost/i.test(url) || /^\d{1,3}(\.\d{1,3}){3}/.test(url)) return 'http://' + url;
       return 'https://' + url;
     }
 
@@ -1019,17 +1029,30 @@
     }
 
     function escapeHtml(str) {
-      return str.replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-      );
+      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
     }
 
-    // --- Theme Management ---
+    // --- Synchronous Speed-of-Light Clock ---
+    const clockEl = document.getElementById('clock');
+    const dateEl = document.getElementById('date');
+    const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
+
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      clockEl.textContent = `${h}:${m}:${s}`;
+      dateEl.textContent = now.toLocaleDateString(undefined, dateOptions);
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // --- Theme Application ---
     function applyTheme(theme) {
       currentTheme = theme;
       document.documentElement.setAttribute("data-theme", theme);
       localStorage.setItem("app_theme", theme);
-
       document.querySelectorAll(".theme-chip").forEach(chip => {
         chip.classList.toggle("active", chip.dataset.themeVal === theme);
       });
@@ -1051,17 +1074,16 @@
     function renderEngineDropdown() {
       dropdownMenu.innerHTML = "";
       const current = getActiveEngine();
-      activeEngineIcon.src = current.icon;
-      activeEngineIcon.alt = current.name;
+      activeEngineIcon.innerHTML = ENGINE_SVGS[current.id];
       input.placeholder = `Search with ${current.name} or enter URL`;
 
       ENGINES.forEach(engine => {
         const item = document.createElement("div");
         item.className = `dropdown-item ${engine.id === currentEngineId ? 'active' : ''}`;
         item.innerHTML = `
-          <img src="${engine.icon}" alt="${engine.name}">
+          <span class="engine-svg-icon">${ENGINE_SVGS[engine.id]}</span>
           <span>${engine.name}</span>
-          <i class="ph ph-check check-icon"></i>
+          <svg class="check-icon" viewBox="0 0 256 256"><path fill="currentColor" d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
         `;
         item.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -1078,26 +1100,10 @@
     engineTrigger.addEventListener("click", (e) => {
       e.stopPropagation();
       const isOpen = dropdown.classList.toggle("open");
-      if (isOpen) {
-        document.body.classList.add("is-focused");
-      }
+      if (isOpen) document.body.classList.add("is-focused");
     });
 
-    // --- Live Clock ---
-    function updateClock() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
-
-      const options = { weekday: 'long', month: 'short', day: 'numeric' };
-      document.getElementById('date').textContent = now.toLocaleDateString(undefined, options);
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    // --- Shortcuts (with Number Badges 1-6) ---
+    // --- Shortcuts Rendering ---
     function renderShortcuts() {
       const grid = document.getElementById("shortcuts-grid");
       const list = document.getElementById("shortcut-list");
@@ -1111,7 +1117,7 @@
         card.innerHTML = `
           ${index < 6 ? `<span class="shortcut-badge">${index + 1}</span>` : ''}
           <div class="favicon-avatar">
-            <img src="${getFavicon(item.url)}" alt="${item.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23999%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/></svg>'">
+            <img src="${getFavicon(item.url)}" alt="${item.name}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23999%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/></svg>'">
           </div>
           <span class="shortcut-name">${item.name}</span>
         `;
@@ -1120,10 +1126,10 @@
         const row = document.createElement("div");
         row.className = "shortcut-list-item";
         row.innerHTML = `
-          <img src="${getFavicon(item.url)}" alt="">
+          <img src="${getFavicon(item.url)}" alt="" loading="lazy">
           <span>${item.name}</span>
           <button class="del-btn" onclick="removeShortcut(${index})" title="Delete">
-            <i class="ph ph-trash"></i>
+            <svg class="icon" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
           </button>
         `;
         list.appendChild(row);
@@ -1151,11 +1157,12 @@
       }
     });
 
-    // --- Live Suggestions & Top Hit Rendering (Matches Screenshot) ---
+    // --- Live Suggestions & Instant Top Hit ---
     const suggestionsBox = document.getElementById("suggestions-box");
     let currentScript = null;
     let selectedDropdownIndex = -1;
-    let currentDropdownItems = []; // Stores list of { type: 'url'|'search', url, text }
+    let currentDropdownItems = [];
+    let debounceTimer = null;
 
     function fetchSuggestions(query) {
       if (!query || query.trim() === '') {
@@ -1163,16 +1170,19 @@
         return;
       }
 
-      // If it's a direct URL, immediately render top hit even before Google responds!
+      // 0ms Instant Local Top Hit Render
       if (isUrl(query)) {
         renderDropdownCombined(query, []);
       }
 
-      if (currentScript) currentScript.remove();
-      const script = document.createElement("script");
-      script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=${encodeURIComponent(query)}&callback=handleSuggestions`;
-      document.body.appendChild(script);
-      currentScript = script;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        if (currentScript) currentScript.remove();
+        const script = document.createElement("script");
+        script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=${encodeURIComponent(query)}&callback=handleSuggestions`;
+        document.body.appendChild(script);
+        currentScript = script;
+      }, 100);
     }
 
     window.handleSuggestions = function(data) {
@@ -1190,7 +1200,7 @@
       currentDropdownItems = [];
       const queryIsUrl = isUrl(query);
 
-      // 1. TOP HIT (If typed a URL or known domain)
+      // 1. TOP HIT
       if (queryIsUrl) {
         const fullUrl = formatUrl(query);
         const domain = getDomain(query);
@@ -1207,7 +1217,7 @@
         currentDropdownItems.push(topHitItem);
 
         const topHitEl = document.createElement("div");
-        topHitEl.className = "top-hit-item selected"; // Pre-selected by default!
+        topHitEl.className = "top-hit-item selected";
         topHitEl.innerHTML = `
           <img src="${topHitItem.icon}" class="top-hit-favicon" alt="">
           <span class="top-hit-title">${escapeHtml(topHitItem.title)}</span>
@@ -1219,18 +1229,17 @@
           window.location.href = fullUrl;
         });
         suggestionsBox.appendChild(topHitEl);
-        selectedDropdownIndex = 0; // Default selected on Top Hit!
+        selectedDropdownIndex = 0;
       } else {
         selectedDropdownIndex = -1;
       }
 
-      // 2. SEARCH SUGGESTIONS (With Bold Autocomplete Completion)
+      // 2. SEARCH SUGGESTIONS (Bold Completion)
       searchSuggestions.forEach((text) => {
         const itemObj = { type: 'search', text: text };
         const itemIndex = currentDropdownItems.length;
         currentDropdownItems.push(itemObj);
 
-        // Format: matched prefix is regular, completion is bold (like screenshot)
         let htmlText = "";
         const qLower = query.toLowerCase();
         const tLower = text.toLowerCase();
@@ -1246,7 +1255,7 @@
         sugEl.className = "suggestion-item";
         sugEl.dataset.index = itemIndex;
         sugEl.innerHTML = `
-          <span class="suggestion-icon"><i class="ph ph-magnifying-glass"></i></span>
+          <span class="suggestion-icon"><svg class="icon" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg></span>
           <div>${htmlText}</div>
         `;
         sugEl.addEventListener("mousedown", (e) => {
@@ -1257,20 +1266,13 @@
         suggestionsBox.appendChild(sugEl);
       });
 
-      // 3. QUICK LINKS / FIREFOX SUGGEST STYLE (Deep links or matching shortcuts)
+      // 3. QUICK LINKS
       const domainKey = getDomain(query).replace(/^www\./, '').toLowerCase();
       let quickLinks = POPULAR_DEEP_LINKS[domainKey] || [];
-
-      // Also check user's saved shortcuts matching query
-      const matchingShortcuts = shortcuts.filter(s => 
-        s.name.toLowerCase().includes(query.toLowerCase()) || 
-        s.url.toLowerCase().includes(query.toLowerCase())
-      );
+      const matchingShortcuts = shortcuts.filter(s => s.name.toLowerCase().includes(query.toLowerCase()) || s.url.toLowerCase().includes(query.toLowerCase()));
       
       matchingShortcuts.forEach(s => {
-        if (!quickLinks.some(q => q.url === s.url)) {
-          quickLinks.push({ title: s.name, url: s.url });
-        }
+        if (!quickLinks.some(q => q.url === s.url)) quickLinks.push({ title: s.name, url: s.url });
       });
 
       if (quickLinks.length > 0) {
@@ -1287,7 +1289,7 @@
           qlEl.className = "quick-link-item";
           qlEl.dataset.index = itemIndex;
           qlEl.innerHTML = `
-            <img src="${getFavicon(link.url)}" class="quick-link-favicon" alt="">
+            <img src="${getFavicon(link.url)}" class="quick-link-favicon" alt="" loading="lazy">
             <span class="quick-link-title">${escapeHtml(link.title)}</span>
             <span class="quick-link-domain">— ${escapeHtml(link.url.replace(/^https?:\/\//i, ''))}</span>
           `;
@@ -1313,12 +1315,10 @@
       currentDropdownItems = [];
     }
 
-    // --- Search Submission & Direct URL Router ---
     function executeSearchOrNav() {
       const query = input.value.trim();
       if (!query) return;
 
-      // 1. If an item is actively highlighted in the dropdown
       if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
         const item = currentDropdownItems[selectedDropdownIndex];
         if (item.type === 'url') {
@@ -1331,13 +1331,11 @@
         }
       }
 
-      // 2. Strict Direct URL Navigation
       if (isUrl(query)) {
         window.location.href = formatUrl(query);
         return;
       }
 
-      // 3. Fallback to Search Engine
       const engine = getActiveEngine();
       window.location.href = engine.url + encodeURIComponent(query);
     }
@@ -1348,7 +1346,6 @@
       executeSearchOrNav();
     });
 
-    // Input listeners
     input.addEventListener("input", (e) => {
       const val = e.target.value;
       searchBar.classList.toggle("search-has-text", val.trim().length > 0);
@@ -1360,23 +1357,21 @@
       if (input.value.trim()) fetchSuggestions(input.value.trim());
     });
 
-    // --- Keyboard Navigation (/, 1-6, Arrows, Esc) ---
+    // --- Instant Keyboard Actions ---
     const dialog = document.getElementById("dialog-overlay");
 
     window.addEventListener("keydown", (e) => {
       const isModalOpen = dialog.classList.contains("active");
 
-      // 1. '/' TO FOCUS AND '/' AGAIN TO UNFOCUS (Allows typing '/' in URLs)
+      // 1. '/' Toggle Focus
       if (e.key === "/" && !isModalOpen) {
         if (document.activeElement === input) {
-          // If search bar is empty, '/' acts as unfocus toggle!
           if (input.value.trim() === "") {
             e.preventDefault();
             input.blur();
             document.body.classList.remove("is-focused");
             closeSuggestions();
           }
-          // If input has text, let the user type '/' naturally (for URLs like instagram.com/)
         } else {
           e.preventDefault();
           input.focus();
@@ -1384,7 +1379,7 @@
         return;
       }
 
-      // 2. NUMBER KEY SHORTCUTS (1–6)
+      // 2. Number Keys (1-6)
       if (!isModalOpen && document.activeElement !== input) {
         const num = parseInt(e.key, 10);
         if (!isNaN(num) && num >= 1 && num <= 6 && num <= shortcuts.length) {
@@ -1394,7 +1389,7 @@
         }
       }
 
-      // 3. ARROW KEYS FOR SUGGESTIONS & TOP HIT
+      // 3. Arrow Keys
       if (suggestionsBox.classList.contains("active") && currentDropdownItems.length > 0) {
         if (e.key === "ArrowDown") {
           e.preventDefault();
@@ -1409,7 +1404,7 @@
         }
       }
 
-      // 4. ESCAPE KEY
+      // 4. Escape Key
       if (e.key === "Escape") {
         if (dropdown.classList.contains("open")) {
           dropdown.classList.remove("open");
@@ -1426,19 +1421,13 @@
 
     function updateHighlight() {
       const allItems = suggestionsBox.querySelectorAll(".top-hit-item, .suggestion-item, .quick-link-item");
-      allItems.forEach((el, idx) => {
-        el.classList.toggle("selected", idx === selectedDropdownIndex);
-      });
-
+      allItems.forEach((el, idx) => el.classList.toggle("selected", idx === selectedDropdownIndex));
       if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
         const item = currentDropdownItems[selectedDropdownIndex];
-        if (item.type === 'search') {
-          input.value = item.text;
-        }
+        if (item.type === 'search') input.value = item.text;
       }
     }
 
-    // Click outside to collapse
     window.addEventListener("click", (e) => {
       const searchBar = document.getElementById("search-bar");
       if (!searchBar.contains(e.target) && !suggestionsBox.contains(e.target)) {
@@ -1451,11 +1440,11 @@
       }
     });
 
-    // Dialog Modal Listeners
     document.getElementById("open-settings").addEventListener("click", () => dialog.classList.add("active"));
     document.getElementById("close-settings").addEventListener("click", () => dialog.classList.remove("active"));
     dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.classList.remove("active"); });
 
+    // Synchronous execution for instantaneous 0ms display
     renderEngineDropdown();
     renderShortcuts();
   </script>
