@@ -52,6 +52,8 @@
       --md-outline-variant: #35383f;
       --top-hit-bg: #0063e1;
       --top-hit-active: #0052bd;
+      --arrow-btn-bg: #393f51;
+      --arrow-btn-hover: #4a526b;
     }
 
     [data-theme="navy"] {
@@ -67,6 +69,8 @@
       --md-outline-variant: #283244;
       --top-hit-bg: #1d4ed8;
       --top-hit-active: #1e40af;
+      --arrow-btn-bg: #2b384e;
+      --arrow-btn-hover: #384966;
     }
 
     [data-theme="espresso"] {
@@ -82,6 +86,8 @@
       --md-outline-variant: #3c322d;
       --top-hit-bg: #8c4a2f;
       --top-hit-active: #723b24;
+      --arrow-btn-bg: #403430;
+      --arrow-btn-hover: #54443f;
     }
 
     [data-theme="pine"] {
@@ -97,6 +103,8 @@
       --md-outline-variant: #2a372f;
       --top-hit-bg: #1e5e3a;
       --top-hit-active: #174a2e;
+      --arrow-btn-bg: #293a30;
+      --arrow-btn-hover: #364d40;
     }
 
     :root {
@@ -110,7 +118,6 @@
       padding: 0;
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       outline: none !important;
-      /* Completely Invisible Scrollbars across all elements */
       scrollbar-width: none !important;
       -ms-overflow-style: none !important;
     }
@@ -165,7 +172,7 @@
       color: var(--md-on-surface);
     }
 
-    /* Dead-Center Stage with Smooth Float-Up */
+    /* Center Stage */
     .center-stage {
       position: relative;
       width: 100%;
@@ -178,7 +185,6 @@
       transition: transform var(--apple-duration) var(--apple-ease);
     }
 
-    /* Only Shift Up when Focused */
     body.is-focused .center-stage {
       transform: translateY(min(-120px, -15vh));
     }
@@ -227,7 +233,7 @@
       border-radius: 9999px;
       display: flex;
       align-items: center;
-      padding: 0 14px 0 10px;
+      padding: 0 12px 0 10px;
       border: none;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
       transform-origin: center center;
@@ -381,29 +387,44 @@
                   transform var(--apple-duration) var(--apple-ease);
     }
 
+    /* #393f51 Round Circle Submit Arrow Button with Smooth Pop/Hover Animations */
     .submit-arrow-btn {
       display: none;
       align-items: center;
       justify-content: center;
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       border: none;
-      background-color: transparent;
-      color: var(--md-on-surface);
+      background-color: var(--arrow-btn-bg);
+      color: #ffffff;
       cursor: pointer;
       margin-left: 6px;
       font-size: 1.25rem;
-      transition: background-color 0.15s ease, transform 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background-color 0.18s ease,
+                  box-shadow 0.18s ease;
     }
 
     .submit-arrow-btn:hover {
-      background-color: rgba(255, 255, 255, 0.12);
-      transform: translateX(2px);
+      background-color: var(--arrow-btn-hover);
+      transform: scale(1.08) translateX(1px);
+      box-shadow: 0 6px 16px rgba(57, 63, 81, 0.55);
+    }
+
+    .submit-arrow-btn:active {
+      transform: scale(0.92);
     }
 
     .search-has-text .submit-arrow-btn {
       display: flex;
+      animation: popBounce 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popBounce {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .search-has-text .kbd-badge {
@@ -442,6 +463,64 @@
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
+    /* In-Line Calculator Card */
+    .calc-card {
+      background-color: rgba(168, 199, 250, 0.12);
+      border: 1px solid rgba(168, 199, 250, 0.3);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .calc-icon {
+      font-size: 1.3rem;
+      color: var(--md-primary);
+    }
+
+    .calc-details {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .calc-expr {
+      font-size: 0.88rem;
+      color: var(--md-on-surface-variant);
+    }
+
+    .calc-result {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--md-primary);
+    }
+
+    .calc-copy-btn {
+      background-color: var(--md-surface-container-highest);
+      border: 1px solid var(--md-outline-variant);
+      color: var(--md-on-surface);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .calc-copy-btn:hover {
+      background-color: var(--md-primary);
+      color: var(--md-on-primary);
+    }
+
+    /* Top Hit Item */
     .top-hit-item {
       background-color: var(--top-hit-bg);
       color: #ffffff;
@@ -482,7 +561,6 @@
       text-overflow: ellipsis;
     }
 
-    /* VISIT Tag with Arrow Icon */
     .top-hit-tag {
       margin-left: auto;
       display: inline-flex;
@@ -540,6 +618,23 @@
       color: var(--md-on-surface-variant);
       padding: 10px 14px 4px;
       letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .clear-recent-history-btn {
+      background: transparent;
+      border: none;
+      color: var(--md-outline);
+      font-size: 0.72rem;
+      cursor: pointer;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .clear-recent-history-btn:hover {
+      color: #ffb4ab;
     }
 
     .quick-link-item {
@@ -577,7 +672,23 @@
       text-overflow: ellipsis;
     }
 
-    /* Shortcuts Grid */
+    .delete-recent-item-btn {
+      margin-left: auto;
+      background: transparent;
+      border: none;
+      color: var(--md-outline);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    .delete-recent-item-btn:hover {
+      color: #ffb4ab;
+      background-color: rgba(255, 180, 171, 0.1);
+    }
+
+    /* Shortcuts Grid & Drag-Drop */
     .shortcuts-container {
       position: absolute;
       top: calc(100% + 36px);
@@ -602,12 +713,22 @@
       text-decoration: none;
       background-color: var(--md-surface-container);
       border-radius: 16px;
-      transition: background-color 0.15s ease, transform 0.15s ease;
+      transition: background-color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+      cursor: grab;
     }
 
     .md-shortcut-card:hover {
       background-color: var(--md-surface-container-high);
       transform: translateY(-2px);
+    }
+
+    .md-shortcut-card.dragging {
+      opacity: 0.4;
+      transform: scale(0.95);
+    }
+
+    .md-shortcut-card.drag-over {
+      border: 2px dashed var(--md-primary);
     }
 
     .shortcut-badge {
@@ -654,7 +775,6 @@
       text-align: center;
     }
 
-    /* Add Shortcut Tile Button */
     .add-shortcut-card {
       border: 1px dashed var(--md-outline);
       background: transparent;
@@ -698,7 +818,56 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
     }
 
-    /* Settings Dialog with Rich Icons */
+    /* Context Menu */
+    .context-menu {
+      position: fixed;
+      z-index: 200;
+      background-color: var(--md-surface-container-high);
+      border: 1px solid var(--md-outline-variant);
+      border-radius: 14px;
+      padding: 6px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75);
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 170px;
+    }
+
+    .context-menu.active {
+      display: flex;
+    }
+
+    .context-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      color: var(--md-on-surface);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .context-menu-item:hover {
+      background-color: var(--md-surface-container-highest);
+    }
+
+    .context-menu-item.danger {
+      color: #ffb4ab;
+    }
+
+    .context-menu-item.danger:hover {
+      background-color: rgba(255, 180, 171, 0.12);
+    }
+
+    /* =========================================================
+       SETTINGS DIALOG (Wider on PC, Clean M3 Elements)
+       ========================================================= */
     .md-dialog-overlay {
       position: fixed;
       inset: 0;
@@ -718,15 +887,28 @@
     }
 
     .md-dialog {
-      width: 90%;
-      max-width: 480px;
+      width: 92%;
+      max-width: 620px; /* Wider and comfortable on PC */
       background-color: var(--md-surface-container-high);
       border-radius: 28px;
-      padding: 24px;
+      padding: 28px;
       transform: scale(0.92);
       transition: transform var(--apple-duration) var(--apple-ease);
       max-height: 85vh;
       overflow-y: auto;
+    }
+
+    @media (max-width: 640px) {
+      .md-dialog {
+        padding: 20px;
+        max-width: 95%;
+      }
+      .center-stage {
+        padding: 0 12px;
+      }
+      .time {
+        font-size: 3.8rem;
+      }
     }
 
     .md-dialog-overlay.active .md-dialog {
@@ -741,7 +923,7 @@
     }
 
     .dialog-title {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 600;
       color: var(--md-on-surface);
       display: flex;
@@ -750,7 +932,7 @@
     }
 
     .settings-section-title {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       font-weight: 600;
       color: var(--md-primary);
       text-transform: uppercase;
@@ -770,26 +952,53 @@
     }
 
     .cache-info {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .cache-status {
       display: block;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--md-on-surface);
       margin-bottom: 4px;
     }
 
     .cache-subtext {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--md-on-surface-variant);
       line-height: 1.4;
     }
 
+    /* Redesigned Balanced M3 Cache Actions */
     .cache-actions {
-      display: flex;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .md-tonal-button.danger {
+      background-color: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 9999px;
+      padding: 0 18px;
+      height: 42px;
+      font-weight: 600;
+      font-size: 0.86rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .md-tonal-button.danger:hover {
+      background-color: rgba(239, 68, 68, 0.22);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #ffffff;
     }
 
     .theme-grid {
@@ -802,7 +1011,7 @@
     .theme-chip {
       background-color: var(--md-surface-container);
       border: 1px solid var(--md-outline-variant);
-      padding: 10px 12px;
+      padding: 11px 14px;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -828,7 +1037,7 @@
     }
 
     .theme-name {
-      font-size: 0.85rem;
+      font-size: 0.86rem;
       font-weight: 500;
       color: var(--md-on-surface);
       display: flex;
@@ -840,7 +1049,6 @@
       margin-bottom: 16px;
     }
 
-    /* Input with Leading Icon */
     .input-icon-wrapper {
       position: relative;
       display: flex;
@@ -873,12 +1081,12 @@
     }
 
     .md-filled-button {
-      height: 40px;
+      height: 42px;
       padding: 0 20px;
       border-radius: 9999px;
       background-color: var(--md-primary);
       color: var(--md-on-primary);
-      font-size: 0.875rem;
+      font-size: 0.88rem;
       font-weight: 600;
       border: none;
       cursor: pointer;
@@ -892,27 +1100,6 @@
 
     .md-filled-button:hover {
       opacity: 0.92;
-    }
-
-    .md-outlined-button {
-      height: 40px;
-      padding: 0 16px;
-      border-radius: 9999px;
-      background: transparent;
-      border: 1px solid var(--md-outline);
-      color: var(--md-on-surface);
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background-color 0.15s ease;
-    }
-
-    .md-outlined-button:hover {
-      background-color: rgba(255, 255, 255, 0.08);
     }
 
     .shortcut-list {
@@ -929,7 +1116,7 @@
       align-items: center;
       gap: 12px;
       background-color: var(--md-surface-container);
-      padding: 10px 12px;
+      padding: 10px 14px;
       border-radius: 10px;
       font-size: 0.9rem;
     }
@@ -968,7 +1155,7 @@
 
   <!-- Top Action Button -->
   <header class="top-bar">
-    <button class="md-icon-btn" id="open-settings" aria-label="Settings">
+    <button class="md-icon-btn" id="open-settings" aria-label="Settings (Press S)">
       <i class="ph ph-gear"></i>
     </button>
   </header>
@@ -999,7 +1186,7 @@
           type="text" 
           id="search-input" 
           class="search-input" 
-          placeholder="Search or enter URL" 
+          placeholder="Search, calculate, or enter URL" 
           spellcheck="false" 
         />
         
@@ -1013,9 +1200,16 @@
       <div class="suggestions-container" id="suggestions-box"></div>
     </form>
 
-    <!-- Shortcuts Grid (with 1-6 Key Badges + Add Button) -->
+    <!-- Shortcuts Grid (Drag & Drop Reorderable) -->
     <nav class="shortcuts-container" id="shortcuts-grid"></nav>
   </main>
+
+  <!-- Context Menu for Shortcut Tiles -->
+  <div class="context-menu" id="context-menu">
+    <button class="context-menu-item" id="ctx-open-newtab"><i class="ph ph-arrow-square-out"></i> Open in New Tab</button>
+    <button class="context-menu-item" id="ctx-edit"><i class="ph ph-pencil-simple"></i> Edit Shortcut</button>
+    <button class="context-menu-item danger" id="ctx-delete"><i class="ph ph-trash"></i> Delete</button>
+  </div>
 
   <!-- Material 3 Settings Dialog -->
   <div class="md-dialog-overlay" id="dialog-overlay">
@@ -1027,18 +1221,18 @@
         </button>
       </div>
 
-      <!-- Instant Offline Cache Section -->
+      <!-- Instant Offline Cache Section (Clean M3 Design) -->
       <div class="settings-section-title"><i class="ph ph-lightning"></i> Speed & Offline Cache</div>
       <div class="cache-card">
         <div class="cache-info">
           <span class="cache-status" id="cache-status-text">Checking cache...</span>
-          <p class="cache-subtext">Downloads and stores fonts, Phosphor icons, and site favicons directly into local storage so every new tab opens in 0ms offline.</p>
+          <p class="cache-subtext">Stores fonts, icons, and site favicons directly into local storage so every new tab opens in 0ms offline.</p>
         </div>
         <div class="cache-actions">
           <button type="button" class="md-filled-button" id="cache-assets-btn">
-            <i class="ph ph-lightning"></i> Cache All for 0ms Load
+            <i class="ph ph-arrows-clockwise"></i> Refresh Cache
           </button>
-          <button type="button" class="md-outlined-button" id="clear-cache-btn">
+          <button type="button" class="md-tonal-button danger" id="clear-cache-btn">
             <i class="ph ph-trash"></i> Clear Cache
           </button>
         </div>
@@ -1065,16 +1259,16 @@
         </div>
       </div>
 
-      <!-- Add Shortcut -->
+      <!-- Add Shortcut Form (Auto-Fills Title) -->
       <div class="settings-section-title"><i class="ph ph-plus-circle"></i> Add Shortcut (Keys 1–6)</div>
       <div class="form-field">
         <div class="input-icon-wrapper">
-          <i class="ph ph-tag"></i>
-          <input type="text" id="shortcut-name" class="md-input" placeholder="Title (e.g. YouTube)" />
+          <i class="ph ph-link"></i>
+          <input type="text" id="shortcut-url" class="md-input" placeholder="Paste URL (e.g. github.com)" />
         </div>
         <div class="input-icon-wrapper">
-          <i class="ph ph-link"></i>
-          <input type="text" id="shortcut-url" class="md-input" placeholder="URL (e.g. youtube.com)" />
+          <i class="ph ph-tag"></i>
+          <input type="text" id="shortcut-name" class="md-input" placeholder="Title (Auto-filled or custom)" />
         </div>
         <button type="button" class="md-filled-button" id="add-btn">
           <i class="ph ph-plus"></i> Add Shortcut
@@ -1099,12 +1293,25 @@
       { id: "github", name: "GitHub", url: "https://github.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" }
     ];
 
-    // Popular sites directory for instant partial matching (e.g. "ins" -> Instagram)
+    // DDG Search Bangs Configuration
+    const BANGS = {
+      "!yt": { name: "YouTube", url: "https://www.youtube.com/results?search_query=", icon: "https://www.google.com/s2/favicons?domain=youtube.com&sz=128" },
+      "!gh": { name: "GitHub", url: "https://github.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=128" },
+      "!r": { name: "Reddit", url: "https://www.reddit.com/search/?q=", icon: "https://www.google.com/s2/favicons?domain=reddit.com&sz=128" },
+      "!w": { name: "Wikipedia", url: "https://en.wikipedia.org/wiki/Special:Search?search=", icon: "https://www.google.com/s2/favicons?domain=wikipedia.org&sz=128" },
+      "!g": { name: "Google", url: "https://www.google.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=google.com&sz=128" },
+      "!d": { name: "DuckDuckGo", url: "https://duckduckgo.com/?q=", icon: "https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=128" },
+      "!b": { name: "Bing", url: "https://www.bing.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=bing.com&sz=128" },
+      "!a": { name: "Amazon", url: "https://www.amazon.com/s?k=", icon: "https://www.google.com/s2/favicons?domain=amazon.com&sz=128" },
+      "!x": { name: "X", url: "https://x.com/search?q=", icon: "https://www.google.com/s2/favicons?domain=x.com&sz=128" }
+    };
+
     const POPULAR_SITES = [
       { name: "Instagram", domain: "instagram.com", url: "https://www.instagram.com", aliases: ["ins", "insta", "instagram", "ig"] },
       { name: "YouTube", domain: "youtube.com", url: "https://www.youtube.com", aliases: ["yt", "you", "youtube"] },
       { name: "Reddit", domain: "reddit.com", url: "https://www.reddit.com", aliases: ["red", "reddit"] },
       { name: "GitHub", domain: "github.com", url: "https://github.com", aliases: ["git", "github", "gh"] },
+      { name: "Discord", domain: "discord.com", url: "https://discord.com", aliases: ["disc", "discord"] },
       { name: "ChatGPT", domain: "chatgpt.com", url: "https://chatgpt.com", aliases: ["chat", "gpt", "chatgpt", "openai", "ai"] },
       { name: "X", domain: "x.com", url: "https://x.com", aliases: ["x", "twit", "twitter"] },
       { name: "Gmail", domain: "mail.google.com", url: "https://mail.google.com", aliases: ["gmail", "mail", "gma"] },
@@ -1114,7 +1321,6 @@
       { name: "Netflix", domain: "netflix.com", url: "https://www.netflix.com", aliases: ["net", "netflix"] },
       { name: "Amazon", domain: "amazon.com", url: "https://www.amazon.com", aliases: ["amz", "amazon"] },
       { name: "Spotify", domain: "spotify.com", url: "https://www.spotify.com", aliases: ["spot", "spotify"] },
-      { name: "Discord", domain: "discord.com", url: "https://discord.com", aliases: ["disc", "discord"] },
       { name: "Twitch", domain: "twitch.tv", url: "https://www.twitch.tv", aliases: ["twitch"] },
       { name: "LinkedIn", domain: "linkedin.com", url: "https://www.linkedin.com", aliases: ["link", "linkedin"] },
       { name: "Pinterest", domain: "pinterest.com", url: "https://www.pinterest.com", aliases: ["pin", "pinterest"] },
@@ -1155,6 +1361,7 @@
 
     let currentEngineId = localStorage.getItem("selected_engine") || "google";
     let shortcuts = JSON.parse(localStorage.getItem("shortcuts")) || DEFAULT_SHORTCUTS;
+    let recentSearches = JSON.parse(localStorage.getItem("recent_searches")) || [];
     let currentTheme = localStorage.getItem("app_theme") || "obsidian";
 
     function getActiveEngine() {
@@ -1170,12 +1377,10 @@
       return domainPattern.test(str);
     }
 
-    // Match partial strings like "ins" to Instagram, or shortcuts
     function findMatchedSite(q) {
       q = q.trim().toLowerCase();
       if (!q) return null;
 
-      // 1. Check user shortcuts first
       for (let s of shortcuts) {
         let sName = s.name.toLowerCase();
         let sUrl = s.url.toLowerCase();
@@ -1185,7 +1390,6 @@
         }
       }
 
-      // 2. Check popular sites knowledgebase
       for (let site of POPULAR_SITES) {
         if (site.aliases.some(alias => alias === q || alias.startsWith(q))) {
           return site;
@@ -1231,6 +1435,65 @@
       return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
     }
 
+    // --- Math & Currency/Unit Calculator ---
+    function evaluateMathOrConversion(str) {
+      str = str.trim();
+      if (!str) return null;
+
+      // Percentage: e.g. "25% of 800"
+      const pctMatch = str.match(/^([\d.]+)\s*%\s*(?:of|\*)\s*([\d.]+)$/i);
+      if (pctMatch) {
+        const p = parseFloat(pctMatch[1]);
+        const tot = parseFloat(pctMatch[2]);
+        return { expr: `${p}% of ${tot}`, result: formatNum((p / 100) * tot) };
+      }
+
+      // Square root: e.g. "sqrt(144)" or "sqrt 144"
+      const sqrtMatch = str.match(/^sqrt\s*\(?\s*([\d.]+)\s*\)?$/i);
+      if (sqrtMatch) {
+        const val = parseFloat(sqrtMatch[1]);
+        return { expr: `√${val}`, result: formatNum(Math.sqrt(val)) };
+      }
+
+      // Unit Conversions: e.g. "100 c to f", "10 km to miles"
+      const unitMatch = str.match(/^([\d.]+)\s*([a-zA-Z]+)\s+(?:to|in)\s+([a-zA-Z]+)$/i);
+      if (unitMatch) {
+        const val = parseFloat(unitMatch[1]);
+        const from = unitMatch[2].toLowerCase();
+        const to = unitMatch[3].toLowerCase();
+        const res = convertUnits(val, from, to);
+        if (res !== null) return { expr: `${val} ${unitMatch[2]} → ${unitMatch[3]}`, result: res };
+      }
+
+      // Safe Arithmetic Evaluation
+      if (/^[0-9+\-*/().\s^%]+$/.test(str) && /[+\-*/^%]/.test(str)) {
+        if (/[+\-*/^%]$/.test(str.trim())) return null;
+        try {
+          let sanitized = str.replace(/\^/g, '**');
+          const res = Function(`"use strict"; return (${sanitized})`)();
+          if (typeof res === 'number' && !isNaN(res) && isFinite(res)) {
+            return { expr: str, result: formatNum(res) };
+          }
+        } catch(e) {}
+      }
+      return null;
+    }
+
+    function formatNum(num) {
+      if (Number.isInteger(num)) return num.toString();
+      return parseFloat(num.toFixed(4)).toString();
+    }
+
+    function convertUnits(val, from, to) {
+      if ((from === 'c' || from === 'celsius') && (to === 'f' || to === 'fahrenheit')) return `${formatNum((val * 9/5) + 32)} °F`;
+      if ((from === 'f' || from === 'fahrenheit') && (to === 'c' || to === 'celsius')) return `${formatNum((val - 32) * 5/9)} °C`;
+      if (from === 'km' && (to === 'miles' || to === 'mi')) return `${formatNum(val * 0.621371)} miles`;
+      if ((from === 'miles' || from === 'mi') && to === 'km') return `${formatNum(val / 0.621371)} km`;
+      if (from === 'kg' && (to === 'lbs' || to === 'pounds')) return `${formatNum(val * 2.20462)} lbs`;
+      if ((from === 'lbs' || from === 'pounds') && to === 'kg') return `${formatNum(val / 2.20462)} kg`;
+      return null;
+    }
+
     // --- Live Clock ---
     function updateClock() {
       const now = new Date();
@@ -1259,7 +1522,7 @@
     });
     applyTheme(currentTheme);
 
-    // --- Engine Dropdown (NO UPWARD SHIFT WHEN CLICKED) ---
+    // --- Engine Dropdown (No Searchbar Jumps) ---
     const dropdown = document.getElementById("engine-dropdown");
     const dropdownMenu = document.getElementById("engine-menu");
     const engineTrigger = document.getElementById("engine-trigger");
@@ -1294,13 +1557,14 @@
       });
     }
 
-    // Engine selector simply opens menu without triggering is-focused upward shift!
     engineTrigger.addEventListener("click", (e) => {
       e.stopPropagation();
       dropdown.classList.toggle("open");
     });
 
-    // --- Shortcuts Rendering (with + Tile Button) ---
+    // --- Shortcuts: Drag-and-Drop & Reordering ---
+    let draggedIndex = null;
+
     function renderShortcuts() {
       const grid = document.getElementById("shortcuts-grid");
       const list = document.getElementById("shortcut-list");
@@ -1311,6 +1575,8 @@
         const card = document.createElement("a");
         card.href = formatUrl(item.url);
         card.className = "md-shortcut-card";
+        card.draggable = true;
+        card.dataset.index = index;
         card.innerHTML = `
           ${index < 6 ? `<span class="shortcut-badge">${index + 1}</span>` : ''}
           <div class="favicon-avatar">
@@ -1318,8 +1584,48 @@
           </div>
           <span class="shortcut-name">${item.name}</span>
         `;
+
+        // Drag & Drop Listeners
+        card.addEventListener("dragstart", (e) => {
+          draggedIndex = index;
+          card.classList.add("dragging");
+          e.dataTransfer.effectAllowed = "move";
+        });
+
+        card.addEventListener("dragend", () => {
+          card.classList.remove("dragging");
+          document.querySelectorAll(".md-shortcut-card").forEach(c => c.classList.remove("drag-over"));
+        });
+
+        card.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          card.classList.add("drag-over");
+        });
+
+        card.addEventListener("dragleave", () => {
+          card.classList.remove("drag-over");
+        });
+
+        card.addEventListener("drop", (e) => {
+          e.preventDefault();
+          card.classList.remove("drag-over");
+          if (draggedIndex !== null && draggedIndex !== index) {
+            const movedItem = shortcuts.splice(draggedIndex, 1)[0];
+            shortcuts.splice(index, 0, movedItem);
+            localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
+            renderShortcuts();
+          }
+        });
+
+        // Right Click Context Menu
+        card.addEventListener("contextmenu", (e) => {
+          e.preventDefault();
+          showContextMenu(e.clientX, e.clientY, index);
+        });
+
         grid.appendChild(card);
 
+        // Management row in Settings
         const row = document.createElement("div");
         row.className = "shortcut-list-item";
         row.innerHTML = `
@@ -1332,7 +1638,7 @@
         list.appendChild(row);
       });
 
-      // Append '+' Button Tile to Grid
+      // '+' Button Tile
       const addTile = document.createElement("button");
       addTile.type = "button";
       addTile.className = "md-shortcut-card add-shortcut-card";
@@ -1346,7 +1652,7 @@
       `;
       addTile.addEventListener("click", () => {
         dialog.classList.add("active");
-        setTimeout(() => document.getElementById("shortcut-name").focus(), 100);
+        setTimeout(() => document.getElementById("shortcut-url").focus(), 100);
       });
       grid.appendChild(addTile);
     }
@@ -1357,40 +1663,98 @@
       renderShortcuts();
     };
 
-    document.getElementById("add-btn").addEventListener("click", () => {
-      const nameInput = document.getElementById("shortcut-name");
-      const urlInput = document.getElementById("shortcut-url");
-      const name = nameInput.value.trim();
-      const url = urlInput.value.trim();
+    // Auto-fetch Title on URL input in Settings
+    const shortcutUrlInput = document.getElementById("shortcut-url");
+    const shortcutNameInput = document.getElementById("shortcut-name");
 
-      if (name && url) {
-        shortcuts.push({ name, url });
-        localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
-        renderShortcuts();
-        nameInput.value = "";
-        urlInput.value = "";
+    shortcutUrlInput.addEventListener("input", (e) => {
+      const val = e.target.value.trim();
+      if (val && !shortcutNameInput.value.trim()) {
+        const domain = getDomain(val);
+        shortcutNameInput.value = getSiteTitle(domain);
       }
     });
 
-    // --- Live Suggestions & Instant Smart Top Hit ---
+    document.getElementById("add-btn").addEventListener("click", () => {
+      const url = shortcutUrlInput.value.trim();
+      let name = shortcutNameInput.value.trim();
+
+      if (url) {
+        if (!name) name = getSiteTitle(getDomain(url));
+        shortcuts.push({ name, url });
+        localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
+        renderShortcuts();
+        shortcutUrlInput.value = "";
+        shortcutNameInput.value = "";
+      }
+    });
+
+    // --- Right-Click Context Menu Logic ---
+    const ctxMenu = document.getElementById("context-menu");
+    let activeCtxIndex = null;
+
+    function showContextMenu(x, y, index) {
+      activeCtxIndex = index;
+      ctxMenu.style.left = `${Math.min(x, window.innerWidth - 180)}px`;
+      ctxMenu.style.top = `${Math.min(y, window.innerHeight - 140)}px`;
+      ctxMenu.classList.add("active");
+    }
+
+    document.getElementById("ctx-open-newtab").addEventListener("click", () => {
+      if (activeCtxIndex !== null) window.open(formatUrl(shortcuts[activeCtxIndex].url), '_blank');
+      ctxMenu.classList.remove("active");
+    });
+
+    document.getElementById("ctx-edit").addEventListener("click", () => {
+      if (activeCtxIndex !== null) {
+        const s = shortcuts[activeCtxIndex];
+        shortcutUrlInput.value = s.url;
+        shortcutNameInput.value = s.name;
+        removeShortcut(activeCtxIndex);
+        dialog.classList.add("active");
+      }
+      ctxMenu.classList.remove("active");
+    });
+
+    document.getElementById("ctx-delete").addEventListener("click", () => {
+      if (activeCtxIndex !== null) removeShortcut(activeCtxIndex);
+      ctxMenu.classList.remove("active");
+    });
+
+    window.addEventListener("click", () => ctxMenu.classList.remove("active"));
+
+    // --- Live Suggestions, Bangs & Calculator ---
     const suggestionsBox = document.getElementById("suggestions-box");
     let currentScript = null;
     let selectedDropdownIndex = -1;
     let currentDropdownItems = [];
     let debounceTimer = null;
+    let currentAutofillValue = "";
 
     function fetchSuggestions(query) {
+      // 1. Dynamic Bang Detection & Engine Icon Switching
+      const bangKey = Object.keys(BANGS).find(b => query.startsWith(b));
+      if (bangKey) {
+        activeEngineIcon.src = BANGS[bangKey].icon;
+      } else {
+        activeEngineIcon.src = getActiveEngine().icon;
+      }
+
+      // Empty Query -> Render Recent Searches
       if (!query || query.trim() === '') {
-        closeSuggestions();
+        renderRecentSearches();
         return;
       }
 
-      // Check if URL or matched partial prefix (e.g. "ins" -> Instagram)
+      // Instant Local Evaluation (Math & Matched Sites)
+      const mathRes = evaluateMathOrConversion(query);
       const matchedSite = isUrl(query) ? null : findMatchedSite(query);
-      if (isUrl(query) || matchedSite) {
-        renderDropdownCombined(query, [], matchedSite);
+
+      if (mathRes || isUrl(query) || matchedSite || query.startsWith("!")) {
+        renderDropdownCombined(query, [], matchedSite, mathRes);
       }
 
+      // Google JSONP Autocomplete
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         if (currentScript) currentScript.remove();
@@ -1404,20 +1768,101 @@
     window.handleSuggestions = function(data) {
       const rawQuery = input.value.trim();
       if (!rawQuery) {
-        closeSuggestions();
+        renderRecentSearches();
         return;
       }
       const searchSuggestions = (data && data[1]) ? data[1].slice(0, 5) : [];
+      const mathRes = evaluateMathOrConversion(rawQuery);
       const matchedSite = isUrl(rawQuery) ? null : findMatchedSite(rawQuery);
-      renderDropdownCombined(rawQuery, searchSuggestions, matchedSite);
+      renderDropdownCombined(rawQuery, searchSuggestions, matchedSite, mathRes);
     };
 
-    function renderDropdownCombined(query, searchSuggestions, matchedSite = null) {
+    function renderRecentSearches() {
+      if (recentSearches.length === 0) {
+        closeSuggestions();
+        return;
+      }
+
       suggestionsBox.innerHTML = "";
       currentDropdownItems = [];
+      selectedDropdownIndex = -1;
+      currentAutofillValue = "";
+
+      const header = document.createElement("div");
+      header.className = "dropdown-section-label";
+      header.innerHTML = `
+        <span>Recent Searches</span>
+        <button type="button" class="clear-recent-history-btn" id="clear-all-recents">Clear All</button>
+      `;
+      suggestionsBox.appendChild(header);
+
+      document.getElementById("clear-all-recents").addEventListener("click", (e) => {
+        e.stopPropagation();
+        recentSearches = [];
+        localStorage.setItem("recent_searches", JSON.stringify(recentSearches));
+        closeSuggestions();
+      });
+
+      recentSearches.forEach((itemText, idx) => {
+        const itemObj = { type: 'recent', text: itemText };
+        currentDropdownItems.push(itemObj);
+
+        const el = document.createElement("div");
+        el.className = "suggestion-item";
+        el.dataset.index = idx;
+        el.innerHTML = `
+          <span class="suggestion-icon"><i class="ph ph-clock-counter-clockwise"></i></span>
+          <span style="flex:1;">${escapeHtml(itemText)}</span>
+          <button type="button" class="delete-recent-item-btn" title="Remove"><i class="ph ph-x"></i></button>
+        `;
+
+        el.addEventListener("mousedown", (e) => {
+          if (e.target.closest('.delete-recent-item-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            recentSearches.splice(idx, 1);
+            localStorage.setItem("recent_searches", JSON.stringify(recentSearches));
+            renderRecentSearches();
+            return;
+          }
+          e.preventDefault();
+          input.value = itemText;
+          executeSearchOrNav();
+        });
+
+        suggestionsBox.appendChild(el);
+      });
+
+      suggestionsBox.classList.add("active");
+    }
+
+    function renderDropdownCombined(query, searchSuggestions, matchedSite = null, mathRes = null) {
+      suggestionsBox.innerHTML = "";
+      currentDropdownItems = [];
+      currentAutofillValue = "";
       const queryIsUrl = isUrl(query);
 
-      // 1. TOP HIT: Direct URL OR Auto-Detected Site (e.g. "ins" -> Instagram)
+      // A. Math Calculator Card
+      if (mathRes) {
+        const calcEl = document.createElement("div");
+        calcEl.className = "calc-card";
+        calcEl.innerHTML = `
+          <i class="ph ph-equals calc-icon"></i>
+          <div class="calc-details">
+            <span class="calc-expr">${escapeHtml(mathRes.expr)}</span>
+            <span class="calc-result">${escapeHtml(mathRes.result)}</span>
+          </div>
+          <button type="button" class="calc-copy-btn" id="calc-copy"><i class="ph ph-copy"></i> Copy</button>
+        `;
+        calcEl.querySelector("#calc-copy").addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          navigator.clipboard.writeText(mathRes.result);
+          calcEl.querySelector("#calc-copy").innerHTML = `<i class="ph ph-check"></i> Copied`;
+        });
+        suggestionsBox.appendChild(calcEl);
+      }
+
+      // B. Top Hit Card (URL or e.g. "Discord" / "ins")
       if (queryIsUrl || matchedSite) {
         let fullUrl, domain, title, subtitle;
 
@@ -1426,11 +1871,13 @@
           domain = getDomain(query);
           title = getSiteTitle(domain);
           subtitle = query.replace(/^https?:\/\//i, '');
+          currentAutofillValue = domain;
         } else {
           fullUrl = formatUrl(matchedSite.url);
           domain = matchedSite.domain;
           title = matchedSite.name;
           subtitle = matchedSite.domain;
+          currentAutofillValue = matchedSite.domain;
         }
 
         const topHitItem = {
@@ -1453,7 +1900,7 @@
         `;
         topHitEl.addEventListener("mousedown", (e) => {
           e.preventDefault();
-          window.location.href = fullUrl;
+          window.location.assign(fullUrl);
         });
         suggestionsBox.appendChild(topHitEl);
         selectedDropdownIndex = 0;
@@ -1461,7 +1908,7 @@
         selectedDropdownIndex = -1;
       }
 
-      // 2. SEARCH SUGGESTIONS (With Bold Autocomplete Suffix)
+      // C. Search Suggestions (Bold Completion)
       searchSuggestions.forEach((text) => {
         const itemObj = { type: 'search', text: text };
         const itemIndex = currentDropdownItems.length;
@@ -1487,13 +1934,12 @@
         `;
         sugEl.addEventListener("mousedown", (e) => {
           e.preventDefault();
-          const engine = getActiveEngine();
-          window.location.href = engine.url + encodeURIComponent(text);
+          executeSearchWithText(text);
         });
         suggestionsBox.appendChild(sugEl);
       });
 
-      // 3. QUICK LINKS (Deep links or matching shortcuts)
+      // D. Quick Links
       const domainKey = (matchedSite ? matchedSite.domain : getDomain(query)).replace(/^www\./, '').toLowerCase();
       let quickLinks = POPULAR_DEEP_LINKS[domainKey] ? [...POPULAR_DEEP_LINKS[domainKey]] : [];
 
@@ -1526,13 +1972,13 @@
           `;
           qlEl.addEventListener("mousedown", (e) => {
             e.preventDefault();
-            window.location.href = formatUrl(link.url);
+            window.location.assign(formatUrl(link.url));
           });
           suggestionsBox.appendChild(qlEl);
         });
       }
 
-      if (currentDropdownItems.length > 0) {
+      if (currentDropdownItems.length > 0 || mathRes) {
         suggestionsBox.classList.add("active");
       } else {
         closeSuggestions();
@@ -1544,41 +1990,62 @@
       suggestionsBox.innerHTML = "";
       selectedDropdownIndex = -1;
       currentDropdownItems = [];
+      currentAutofillValue = "";
+    }
+
+    function saveRecentSearch(text) {
+      text = text.trim();
+      if (!text || isUrl(text)) return;
+      recentSearches = [text, ...recentSearches.filter(r => r !== text)].slice(0, 5);
+      localStorage.setItem("recent_searches", JSON.stringify(recentSearches));
+    }
+
+    function executeSearchWithText(query) {
+      saveRecentSearch(query);
+      const engine = getActiveEngine();
+      window.location.assign(engine.url + encodeURIComponent(query));
     }
 
     function executeSearchOrNav() {
-      const query = input.value.trim();
-      if (!query) return;
+      const raw = input.value.trim();
+      if (!raw) return;
 
-      // 1. Selected Dropdown item execution
-      if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
-        const item = currentDropdownItems[selectedDropdownIndex];
-        if (item.type === 'url') {
-          window.location.href = item.url;
-          return;
-        } else {
-          const engine = getActiveEngine();
-          window.location.href = engine.url + encodeURIComponent(item.text);
+      // 1. Check Bangs (e.g. "!yt lofi")
+      for (let b in BANGS) {
+        if (raw.startsWith(b)) {
+          const cleanQuery = raw.slice(b.length).trim();
+          window.location.assign(BANGS[b].url + encodeURIComponent(cleanQuery));
           return;
         }
       }
 
-      // 2. Direct URL navigation
-      if (isUrl(query)) {
-        window.location.href = formatUrl(query);
+      // 2. Highlighted item in dropdown
+      if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
+        const item = currentDropdownItems[selectedDropdownIndex];
+        if (item.type === 'url') {
+          window.location.assign(item.url);
+          return;
+        } else {
+          executeSearchWithText(item.text);
+          return;
+        }
+      }
+
+      // 3. Direct URL
+      if (isUrl(raw)) {
+        window.location.assign(formatUrl(raw));
         return;
       }
 
-      // 3. Matched Site navigation (e.g. typing "ins" -> Instagram)
-      const matched = findMatchedSite(query);
+      // 4. Auto-detected site (e.g. typing "Discord" or "ins")
+      const matched = findMatchedSite(raw);
       if (matched) {
-        window.location.href = formatUrl(matched.url);
+        window.location.assign(formatUrl(matched.url));
         return;
       }
 
-      // 4. Default Search Engine
-      const engine = getActiveEngine();
-      window.location.href = engine.url + encodeURIComponent(query);
+      // 5. Default search engine
+      executeSearchWithText(raw);
     }
 
     const form = document.getElementById("search-form");
@@ -1593,19 +2060,35 @@
       fetchSuggestions(val);
     });
 
-    // Focusing the input triggers the smooth upward spotlight shift
     input.addEventListener("focus", () => {
       document.body.classList.add("is-focused");
-      if (input.value.trim()) fetchSuggestions(input.value.trim());
+      fetchSuggestions(input.value.trim());
     });
 
-    // Keyboard Navigation
+    // --- Keyboard Navigation: Arrows, Autofill & Shortcuts ---
     const dialog = document.getElementById("dialog-overlay");
 
     window.addEventListener("keydown", (e) => {
       const isModalOpen = dialog.classList.contains("active");
 
-      // 1. '/' Toggle Focus (Unfocuses only if input is empty)
+      // Press 'S' to open settings (when not typing in search)
+      if ((e.key === "s" || e.key === "S") && document.activeElement !== input && !isModalOpen) {
+        e.preventDefault();
+        dialog.classList.add("active");
+        return;
+      }
+
+      // Right Arrow (->) or Tab Key Autofill (e.g. typing "Discord" -> autofills "discord.com")
+      if ((e.key === "ArrowRight" || e.key === "Tab") && document.activeElement === input) {
+        if (currentAutofillValue && input.value.trim() !== currentAutofillValue) {
+          e.preventDefault();
+          input.value = currentAutofillValue;
+          fetchSuggestions(currentAutofillValue);
+          return;
+        }
+      }
+
+      // '/' Toggle Focus
       if (e.key === "/" && !isModalOpen) {
         if (document.activeElement === input) {
           if (input.value.trim() === "") {
@@ -1621,17 +2104,17 @@
         return;
       }
 
-      // 2. Number Keys (1-6)
+      // Number Keys 1-6 for shortcuts
       if (!isModalOpen && document.activeElement !== input) {
         const num = parseInt(e.key, 10);
         if (!isNaN(num) && num >= 1 && num <= 6 && num <= shortcuts.length) {
           e.preventDefault();
-          window.location.href = formatUrl(shortcuts[num - 1].url);
+          window.location.assign(formatUrl(shortcuts[num - 1].url));
           return;
         }
       }
 
-      // 3. Arrow Keys
+      // Arrow Keys in Suggestions
       if (suggestionsBox.classList.contains("active") && currentDropdownItems.length > 0) {
         if (e.key === "ArrowDown") {
           e.preventDefault();
@@ -1646,7 +2129,7 @@
         }
       }
 
-      // 4. Escape Key
+      // Escape Key
       if (e.key === "Escape") {
         if (dropdown.classList.contains("open")) {
           dropdown.classList.remove("open");
@@ -1666,7 +2149,7 @@
       allItems.forEach((el, idx) => el.classList.toggle("selected", idx === selectedDropdownIndex));
       if (selectedDropdownIndex >= 0 && currentDropdownItems[selectedDropdownIndex]) {
         const item = currentDropdownItems[selectedDropdownIndex];
-        if (item.type === 'search') input.value = item.text;
+        if (item.type === 'search' || item.type === 'recent') input.value = item.text;
       }
     }
 
@@ -1683,7 +2166,7 @@
     });
 
     // =========================================================
-    // INSTANT CACHE ENGINE (Fonts, Icons & Favicons)
+    // INSTANT CACHE ENGINE
     // =========================================================
     const cacheStatusText = document.getElementById("cache-status-text");
     const cacheBtn = document.getElementById("cache-assets-btn");
@@ -1703,7 +2186,7 @@
 
     async function cacheAllAssets() {
       cacheBtn.disabled = true;
-      cacheBtn.innerHTML = `<i class="ph ph-circle-notch"></i> Downloading & Caching...`;
+      cacheBtn.innerHTML = `<i class="ph ph-circle-notch"></i> Downloading...`;
 
       try {
         const fontCssRes = await fetch("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
